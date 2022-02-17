@@ -1,0 +1,27 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = LocateProtocolTest
+  FILE_GUID                      = 78f30ac3-1d54-4a6c-8f2f-669e6ef292d2
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = LocateProtocolTestEntry
+
+[Sources]
+  LocateProtocolTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+
+[Protocols]
+  gPonyTestProtocolGuid
+  
+[Depex]
+  gPonyTestProtocolGuid
+

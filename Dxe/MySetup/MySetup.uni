@@ -1,0 +1,32 @@
+/= #
+
+#langdef en-US  "English"
+
+#string STR_FORM_SET_TITLE             #language en-US "PONY's Setup Menu"
+#string STR_FORM_SET_TITLE_HELP        #language en-US "Create a setup menu test"
+
+#string STR_PONY_FORM1_TITLE           #language en-US "Pony's title."
+
+#string STR_PONY_EMPTY_STRING          #language en-US ""
+
+#string STR_PONY_SUBTITLE_TEXT         #language en-US "Test subtitle"
+
+#string STR_PONY_TEXT1_CONTENT1        #language en-US "Test 1."
+#string STR_PONY_TEXT1_CONTENT2        #language en-US "Test 1 - 2."
+#string STR_PONY_TEXT1_HELP            #language en-US "Test 1 help information."
+
+#string STR_PONY_TEXT2_CONTENT1        #language en-US "Test 2."
+#string STR_PONY_TEXT2_CONTENT2        #language en-US "Test 2 - 2."
+#string STR_PONY_TEXT2_HELP            #language en-US "Test 2 help information."
+
+#string STR_STANDARD_DEFAULT_PROMPT    #language en-US "Load Default."
+#string STR_STANDARD_DEFAULT_HELP      #language en-US "Setup Menu Load Default."
+
+#string STR_PONY_NUMERIC1_CONTENT      #language en-US "Age."
+#string STR_PONY_NUMERIC1_HELP         #language en-US "Age."
+
+#string STR_PONY_NUMERIC2_CONTENT      #language en-US "Heigh."
+#string STR_PONY_NUMERIC2_HELP         #language en-US "Heigh."
+
+#string STR_PONY_NUMERIC3_CONTENT      #language en-US "Weight."
+#string STR_PONY_NUMERIC3_HELP         #language en-US "Weight."

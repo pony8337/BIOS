@@ -1,0 +1,27 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = InstallProtocolTest
+  FILE_GUID                      = 82aa6aef-0507-4edd-8cb6-1e4a12e7f937
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = InstallProtocolTestEntry
+
+[Sources]
+  InstallProtocolTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiBootServicesTableLib
+  UefiLib
+  DebugLib
+
+[Protocols]
+  gPonyTestProtocolGuid
+  
+[Depex]
+  TRUE
+

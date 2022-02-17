@@ -1,0 +1,28 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = createHobTest
+  FILE_GUID                      = a0c8c5e4-54b6-4802-b2df-501ddd3cf6a4
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = createHobTest
+
+[Sources]
+  createHobTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  PeimEntryPoint
+
+[Guids]
+  gcreateHobTestGuid
+
+[Ppis]
+
+[Depex]
+  TRUE
+

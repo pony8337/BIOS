@@ -1,0 +1,27 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = getHobTest
+  FILE_GUID                      = 8630cb87-6de4-4d69-a0b5-550bf74d3302
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = getHobTest
+
+[Sources]
+  getHobTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  HobLib
+
+[Guids]
+   gcreateHobTestGuid
+
+[Depex]
+  TRUE
+

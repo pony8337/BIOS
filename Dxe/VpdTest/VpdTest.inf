@@ -1,0 +1,29 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = VpdTest
+  FILE_GUID                      = 284db45e-30fd-41fe-a442-f93df7b146e8
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = VpdTestEntrty
+
+[Sources]
+  VpdTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  PcdLib
+
+[Pcd]
+  gElearningTestGuid.PcdVpdTest
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress64
+
+[Depex]
+  TRUE
+

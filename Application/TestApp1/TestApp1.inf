@@ -1,0 +1,24 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = TestApp1
+  FILE_GUID                      = 57aa10b4-333c-43a7-a6ca-2f81630e1de4
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+[Sources]
+  TestApp1.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint
+  UefiLib
+  BaseLib
+  PcdLib
+
+[PatchPcd]
+  gElearningTestGuid.PcdPatchableInModuleTest
+

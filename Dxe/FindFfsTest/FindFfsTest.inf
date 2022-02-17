@@ -1,0 +1,28 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = FindFfsTest
+  FILE_GUID                      = e16cfe2a-e076-4418-bb18-133184c28ea4
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = FindFfsTest
+
+[Sources]
+  FindFfsTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+  EmbeddedPkg/EmbeddedPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  HobLib
+
+[Guids]
+  gVpdFfsTestGuid
+
+[Depex]
+  TRUE
+

@@ -1,0 +1,71 @@
+#include "MySetupGuid.h"
+
+formset
+  guid      = PONY_SETUP_GUID,
+  title     = STRING_TOKEN(STR_FORM_SET_TITLE),
+  help      = STRING_TOKEN(STR_FORM_SET_TITLE_HELP),
+
+  // Declare var storage
+  //
+  // Define a Buffer Storage (EFI_IFR_VARSTORE)
+  //
+  varstore MY_VARSTORE_CONFIGURATION,       // This is the data structure type
+//  varid = CONFIGURATION_VARSTORE_ID,      // Optional VarStore ID
+    name  = PonySetupNVData,                // Define referenced name in vfr
+    guid  = PONY_SETUP_GUID;                // GUID of this buffer storage
+  
+  defaultstore MyStandardDefault,
+    prompt      = STRING_TOKEN(STR_STANDARD_DEFAULT_PROMPT),
+    attribute   = 0x0000;  
+
+  form formid = 1,
+    title  = STRING_TOKEN(STR_PONY_FORM1_TITLE); 
+    subtitle text = STRING_TOKEN(STR_PONY_EMPTY_STRING);
+    subtitle text = STRING_TOKEN(STR_PONY_SUBTITLE_TEXT);
+
+    text
+      help   = STRING_TOKEN(STR_PONY_TEXT1_HELP),
+      text   = STRING_TOKEN(STR_PONY_TEXT1_CONTENT1),
+      text   = STRING_TOKEN(STR_PONY_TEXT1_CONTENT2),
+      flags  = 0,
+      key    = 0x01;
+
+    text
+      help   = STRING_TOKEN(STR_PONY_TEXT2_HELP),
+      text   = STRING_TOKEN(STR_PONY_TEXT2_CONTENT1),
+      text   = STRING_TOKEN(STR_PONY_TEXT2_CONTENT2),
+      flags  = 0,
+      key    = 0x02;
+
+    numeric varid  = PonySetupNVData.age,
+      prompt       = STRING_TOKEN(STR_PONY_NUMERIC1_CONTENT),
+      help         = STRING_TOKEN(STR_PONY_NUMERIC1_HELP),
+      minimum      = 0,
+      maximum      = 0xFF,
+      default      = 29, defaultstore = MyStandardDefault,
+    endnumeric;
+
+    numeric varid  = PonySetupNVData.heigh,
+      prompt       = STRING_TOKEN(STR_PONY_NUMERIC2_CONTENT),
+      help         = STRING_TOKEN(STR_PONY_NUMERIC2_HELP),
+      minimum      = 0,
+      maximum      = 0xFF,
+      default      = 165, defaultstore = MyStandardDefault,
+    endnumeric;
+
+    numeric varid  = PonySetupNVData.weight,
+      prompt       = STRING_TOKEN(STR_PONY_NUMERIC3_CONTENT),
+      help         = STRING_TOKEN(STR_PONY_NUMERIC3_HELP),
+      minimum      = 0,
+      maximum      = 0xFF,
+      default      = 100, defaultstore = MyStandardDefault,
+    endnumeric;
+
+    resetbutton
+      defaultstore = MyStandardDefault,
+      prompt   = STRING_TOKEN(STR_STANDARD_DEFAULT_PROMPT),
+      help     = STRING_TOKEN(STR_STANDARD_DEFAULT_HELP),
+    endresetbutton;
+
+  endform;
+endformset;

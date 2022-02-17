@@ -1,0 +1,42 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = MySetup
+  MODULE_UNI_FILE                = MySetup.uni
+  FILE_GUID                      = 2e464376-97a3-4359-97e3-d3d97b2eb0de
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = MySetupInit
+  UNLOAD_IMAGE                   = MySetupUnload
+
+[Sources]
+  MySetup.c
+  MySetup.h
+  MySetup.uni
+  MySetupVfr.vfr
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  HiiLib
+  BaseMemoryLib
+  MemoryAllocationLib
+  DevicePathLib
+
+[Protocols]
+  gEfiHiiConfigAccessProtocolGuid
+  gEfiHiiConfigRoutingProtocolGuid
+
+[Guids]
+  gPonySetupGuid
+  
+[Pcd]
+
+[Depex]
+  gEfiHiiDatabaseProtocolGuid
+

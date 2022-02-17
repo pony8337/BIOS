@@ -1,0 +1,26 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = locatePpiTest
+  FILE_GUID                      = c04ae939-dd53-4a87-abc8-2ba528ed6599
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = locatePpiTestEntry
+
+[Sources]
+  locatePpiTest.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  PeimEntryPoint
+
+
+[Ppis]
+  gPonyTestPpiGuid
+
+[Depex]
+  TRUE
+

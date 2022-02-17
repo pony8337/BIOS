@@ -1,0 +1,38 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = HelloWorld
+  FILE_GUID                      = 70b15019-13f2-4435-83e5-838ade636380
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = HelloWorldDxe
+
+[Sources]
+  HelloWorld.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  TestLib
+  PcdLib
+
+[Guids]
+  gPonyHiiTestGuid
+
+[FeaturePcd]
+  gElearningTestGuid.PcdPonyFeatureFlagTest
+
+[PatchPcd]
+  gElearningTestGuid.PcdPatchableInModuleTest
+  gElearningTestGuid.PcdPatchableValueTest
+
+[Pcd]
+  gElearningTestGuid.PcdHiiTest
+
+[Depex]
+  TRUE
+

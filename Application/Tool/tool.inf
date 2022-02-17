@@ -1,0 +1,59 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = tool
+  FILE_GUID                      = 6987936E-ED34-ffdb-AE97-1FA5E4ED2117
+  MODULE_TYPE                    = UEFI_APPLICATION
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = UefiMain
+
+#
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF EBC
+#
+
+[Sources]  
+  tool.c 
+  CMOS.c
+  IOSpace_v2.c
+  PCI.c
+  Memory.c
+  SMBus_v2.c
+  Eeprom.c
+  EDID.c
+  SMBios_v2.c
+  USBView.c
+  Variable.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  UefiCpuPkg/UefiCpuPkg.dec
+
+[LibraryClasses]
+  UefiApplicationEntryPoint  
+  UefiLib
+  IoLib
+  PciLib
+    
+[Protocols] 
+  gEfiEdidDiscoveredProtocolGuid
+	gEfiUsbIoProtocolGuid
+  gEfiDevicePathToTextProtocolGuid
+  gEfiSimpleTextInProtocolGuid
+
+[FeaturePcd]
+[Pcd.common]
+[Guids]
+ 
+[Depex]
+
+[BuildOptions]
+  MSFT:Debug_*_X64_CC_FLAGS ==  /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL  /EHs-c- /GR- /GF /Gy /Zi /Gm /D EFI_SPECIFICATION_VERSION=0x0002000A /D TIANO_RELEASE_VERSION=0x00080006 /FAs /Oi-
+  #MSFT:*_*_*_CC_FLAGS ==  /nologo /c /WX /GS- /W4 /Gs32768 /D UNICODE /O1ib2 /GL  /EHs-c- /GR- /GF /Gy /Zi /Gm /D EFI_SPECIFICATION_VERSION=0x0002000A /D TIANO_RELEASE_VERSION=0x00080006 /FAs /Oi-
+  #MSFT:*_*_*_CC_FLAGS =   /wd4804 
+  #MSFT:Debug_*_IA32_CC_FLAGS = 
+  #MSFT:Debug_*_X64_CC_FLAGS = 
+  #MSFT:Release_*_IA32_CC_FLAGS = 
+  #MSFT:Release_*_IA32_CC_FLAGS = 
+  #MSFT:Release_*_IA32_DLINK_FLAGS = 
+  #GCC:Release_*_IA32_CC_FLAGS = 

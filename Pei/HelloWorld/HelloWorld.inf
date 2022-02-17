@@ -1,0 +1,26 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = HelloWorldPei
+  FILE_GUID                      = 0842cabd-8332-4411-83e7-1a15c0c73bcf
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = HelloWorldPei
+
+[Sources]
+  HelloWorld.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+
+[LibraryClasses]
+  BaseLib
+  DebugLib
+  PeimEntryPoint
+
+
+[Ppis]
+
+
+[Depex]
+  TRUE
+

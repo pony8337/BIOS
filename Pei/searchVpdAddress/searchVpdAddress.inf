@@ -1,0 +1,32 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = searchVpdAddress
+  FILE_GUID                      = 89e7ec19-cfd3-4f47-8bf1-47950d8c3d47
+  MODULE_TYPE                    = PEIM
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = searchVpdAddressEntry
+
+[Sources]
+  searchVpdAddress.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  DebugLib
+  PcdLib
+  PeimEntryPoint
+  PeiServicesLib
+
+[Guids]
+  gVpdFfsTestGuid
+
+[Pcd]
+  gEfiMdeModulePkgTokenSpaceGuid.PcdVpdBaseAddress64
+
+
+[Depex]
+  TRUE
+
