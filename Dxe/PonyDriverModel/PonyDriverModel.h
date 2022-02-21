@@ -6,6 +6,8 @@
 #include <Protocol/DriverBinding.h>
 #include <Library/UefiLib.h>
 #include <Library/DebugLib.h>
+#include <Protocol/installProtocolTest.h>
+#include <Library/UefiBootServicesTableLib.h>
 
 //
 // Global Variables

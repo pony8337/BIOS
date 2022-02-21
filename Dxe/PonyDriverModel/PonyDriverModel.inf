@@ -21,7 +21,7 @@
   DebugLib
 
 [Protocols]
-
+  gPonyTestProtocolGuid
 [Pcd]
 
 [Depex]

@@ -19,7 +19,34 @@ PonyDriverBindingSupported (
   IN EFI_DEVICE_PATH_PROTOCOL     *RemainingDevicePath OPTIONAL
   )
 {
+  PONY_TEST_PROTOCOL  *PonyTest;
+  EFI_STATUS          Status;
+
   DEBUG((DEBUG_INFO, "PonyDriverBindingSupported\n"));
+
+  //[test] Attach gPonyTestProtocolGuid Driver ++
+
+  Status = gBS->OpenProtocol (
+                  ControllerHandle,
+                  &gPonyTestProtocolGuid,
+                  (VOID **) &PonyTest,
+                  This->DriverBindingHandle,
+                  ControllerHandle,
+                  EFI_OPEN_PROTOCOL_BY_DRIVER
+                  );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+   gBS->CloseProtocol (
+         ControllerHandle,
+         &gPonyTestProtocolGuid,
+         This->DriverBindingHandle,
+         ControllerHandle
+         );
+
+  //[test] Attach gPonyTestProtocolGuid Driver --
+  
   return EFI_SUCCESS;
 }
 
@@ -31,7 +58,27 @@ PonyDriverBindingStart (
   IN EFI_DEVICE_PATH_PROTOCOL     *RemainingDevicePath OPTIONAL
   )
 {
+  PONY_TEST_PROTOCOL  *PonyTest;
+  EFI_STATUS          Status;
+
   DEBUG((DEBUG_INFO, "PonyDriverBindingStart\n"));
+
+  //[test] Attach gPonyTestProtocolGuid Driver ++
+
+  Status = gBS->OpenProtocol (
+                  ControllerHandle,
+                  &gPonyTestProtocolGuid,
+                  (VOID **) &PonyTest,
+                  This->DriverBindingHandle,
+                  ControllerHandle,
+                  EFI_OPEN_PROTOCOL_BY_DRIVER
+                  );
+  if (EFI_ERROR (Status)) {
+    return Status;
+  }
+
+  //[test] Attach gPonyTestProtocolGuid Driver --
+  
   return EFI_SUCCESS;
 }
 
@@ -44,8 +91,20 @@ PonyDriverBindingStop (
   IN  EFI_HANDLE                     *ChildHandleBuffer
   )
 {
+  EFI_STATUS          Status;
+
   DEBUG((DEBUG_INFO, "PonyDriverBindingStop\n"));
-  return EFI_SUCCESS;
+
+  //[test] Attach gPonyTestProtocolGuid Driver ++
+
+  Status = gBS->CloseProtocol (
+            ControllerHandle,
+            &gPonyTestProtocolGuid,
+            This->DriverBindingHandle,
+            ControllerHandle
+          );
+  return Status;
+  //[test] Attach gPonyTestProtocolGuid Driver --
 }
 
 EFI_STATUS
@@ -60,8 +119,6 @@ InitializeDriverModel (
   //
   // Install driver model protocol(s).
   //
-  DEBUG((DEBUG_INFO, "PonyDriverModel initialize start .......\n"));
-
   Status = EfiLibInstallDriverBindingComponentName2 (
              ImageHandle,
              SystemTable,
@@ -72,7 +129,5 @@ InitializeDriverModel (
              );
   ASSERT_EFI_ERROR (Status);
   
-  DEBUG((DEBUG_INFO, "PonyDriverModel initialize finish .......\n"));
-
   return Status;
 }
