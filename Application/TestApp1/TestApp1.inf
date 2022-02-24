@@ -13,6 +13,9 @@
   MdePkg/MdePkg.dec
   LearningTestPkg/LearningTestPkg.dec
 
+[Protocols]
+  gEfiSimpleTextInProtocolGuid
+
 [LibraryClasses]
   UefiApplicationEntryPoint
   UefiLib

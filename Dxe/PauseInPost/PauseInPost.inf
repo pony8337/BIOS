@@ -1,0 +1,28 @@
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = PauseInPost
+  FILE_GUID                      = ff735569-13e3-4fd2-8c65-6e0f2dfa4078
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 1.0
+  ENTRY_POINT                    = PauseInPostEntry
+
+[Sources]
+  PauseInPost.c
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+  LearningTestPkg/LearningTestPkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  DebugLib
+  
+[Protocols]
+  gEfiSimpleTextInProtocolGuid
+
+[Depex]
+  gEfiGraphicsOutputProtocolGuid AND
+  gEfiSimpleTextInputExProtocolGuid 
+

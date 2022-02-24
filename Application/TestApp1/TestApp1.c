@@ -3,6 +3,8 @@
 #include <Library/UefiLib.h>
 #include <Library/UefiApplicationEntryPoint.h>
 #include <Library/PcdLib.h>
+#include <Protocol/SimpleTextIn.h>
+#include <Library/UefiBootServicesTableLib.h>
 
 EFI_STATUS
 EFIAPI
@@ -11,15 +13,22 @@ UefiMain (
   IN EFI_SYSTEM_TABLE  *SystemTable
   )
 {
-  CHAR16 *test2;
-  UINTN len;
-  test2 = L"ChangeWorld";
-  len = StrLen(test2);
+  EFI_SIMPLE_TEXT_INPUT_PROTOCOL       *Key;
+  EFI_INPUT_KEY                        KeyData;
+  EFI_STATUS                           Status;
   Print(L"Hello, This is Pony's Application Test\n");
-  Print(L"Pony's Patchable Pcd Test\n");
-  Print(L"PcdPatchableInModuleTest = %s\n", (CHAR16*)PatchPcdGetPtr(PcdPatchableInModuleTest));
-  PatchPcdSetPtr(PcdPatchableInModuleTest, &len, test2);
-  Print(L"Change PCD value\n");
-  Print(L"PcdPatchableInModuleTest = %s\n", (CHAR16*)PatchPcdGetPtr(PcdPatchableInModuleTest));
+  gBS->HandleProtocol(
+      gST->ConsoleInHandle,
+      &gEfiSimpleTextInProtocolGuid,
+      (VOID**)&Key
+      );
+  
+   
+  while(1){    
+    Status = Key->ReadKeyStroke(Key, &KeyData);
+    if(Status == EFI_SUCCESS){
+      break;
+    }
+  }
   return EFI_SUCCESS;
 }
