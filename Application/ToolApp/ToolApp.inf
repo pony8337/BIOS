@@ -8,6 +8,7 @@
 
 [Sources]
   ToolApp.c
+  CMOS.c
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -16,4 +17,5 @@
 [LibraryClasses]
   UefiLib
   ShellCEntryLib
+  UefiBootServicesTableLib
 
