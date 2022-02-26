@@ -8,8 +8,8 @@ updateCMOSData(
   UINTN  x;
   UINT8  Data;
   for(x = 0; x <= 0xFF; x++){
-    IoWrite8(0x70, (UINT8)x);
-    Data = IoRead8(0x71); 
+    IoWrite8(CMOS_PORT, (UINT8)x);
+    Data = IoRead8(CMOS_VALUE); 
     if(CMOSData[x] != Data){
       CMOSData[x] = Data;  
       x == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
