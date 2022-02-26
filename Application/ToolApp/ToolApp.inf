@@ -8,6 +8,7 @@
 
 [Sources]
   ToolApp.c
+  COMFunction.c
   CMOS.c
 
 [Packages]
@@ -17,5 +18,5 @@
 [LibraryClasses]
   UefiLib
   ShellCEntryLib
-  UefiBootServicesTableLib
+  IoLib
 
