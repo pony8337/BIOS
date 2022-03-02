@@ -5,6 +5,7 @@
 #include <Library/IoLib.h>
 #include <Library/UefiLib.h>
 #include <Library/ShellCEntryLib.h>
+#include <Library/BaseMemoryLib.h>
 
 extern EFI_SYSTEM_TABLE     *gST;
 extern EFI_BOOT_SERVICES    *gBS;
@@ -70,9 +71,7 @@ ChangeInputData (
 //
 // CMOS 
 //
-VOID  CMOS();
-UINT8 CMOSData[256] = {0};
-
+VOID CMOS();
 VOID IOSpace();
 VOID PCI();
 VOID Memory();

@@ -2,19 +2,20 @@
 
 VOID 
 updateCMOSData(
-  UINT8 offset
+  UINT8 *DataArray,
+  UINT8  offset
   )
 {
   UINTN  x;
   UINT8  Data;
-  for(x = 0; x <= 0xFF; x++){
+  for(x = 0; x <= 0xFF; x++) {
     IoWrite8(CMOS_PORT, (UINT8)x);
     Data = IoRead8(CMOS_VALUE); 
-    if(CMOSData[x] != Data){
-      CMOSData[x] = Data;  
+    if(DataArray[x] != Data) {
+      DataArray[x] = Data;  
       x == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
       gotoXY(offsetX(x), offsetY(x));
-      Print(L"%02x ", CMOSData[x]);
+      Print(L"%02x ", DataArray[x]);
     }
   }
   return ;
@@ -29,11 +30,15 @@ CMOS() {
   EFI_EVENT     TimerEvent;
   EFI_EVENT     WaitList[2];
   BOOLEAN       InputMode;
-  UINT8         InputData = 0;
+  UINT8         InputData;
+  UINT8         CMOSData[256];
+
   //clean full scran and leave
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
+  InputData = 0;
   InputMode = FALSE;
+  ZeroMem(CMOSData, 256*sizeof(UINT8));
   gotoXY(0, 0);
   SetColor(EFI_LIGHTGRAY);
   Print(L"CMOS - 70/71\n");
@@ -53,7 +58,7 @@ CMOS() {
   }
 
   //Update CMOS Data
-  updateCMOSData((UINT8)offset);
+  updateCMOSData(&CMOSData[0], (UINT8)offset);
 
   do {
     // Set a timer event of 1 second expiration  
@@ -64,7 +69,7 @@ CMOS() {
     // waiting event ... (Input Key or time to update data)
     gBS->WaitForEvent (2, WaitList, &EventIndex); 
     gBS->CloseEvent (TimerEvent);
-    updateCMOSData((UINT8)offset);
+    updateCMOSData(&CMOSData[0], (UINT8)offset);
     if(EventIndex == 1) continue;
     gST->ConIn->ReadKeyStroke(gST->ConIn, &key);
     switch(key.ScanCode) {
