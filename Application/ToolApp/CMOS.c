@@ -1,7 +1,6 @@
 #include "ToolApp.h"
 
-VOID 
-updateCMOSData(
+VOID updateCMOSData (
   UINT8 *DataArray,
   UINT8  offset
   )
@@ -21,8 +20,7 @@ updateCMOSData(
   return ;
 }
 
-VOID 
-CMOS() {
+VOID CMOS() {
   EFI_INPUT_KEY key;
   UINTN         offset;
   UINTN         Index;
@@ -33,7 +31,7 @@ CMOS() {
   UINT8         InputData;
   UINT8         CMOSData[256];
 
-  //clean full scran and leave
+  //clean full scream
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
   InputData = 0;

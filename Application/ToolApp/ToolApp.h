@@ -69,7 +69,7 @@ ChangeInputData (
 );
 
 //
-// CMOS 
+// Tool Function
 //
 VOID CMOS();
 VOID IOSpace();
@@ -80,6 +80,7 @@ VOID EDID();
 VOID SMBios();
 VOID USBView();
 VOID Variable();
+VOID About();
 
 // Tool Menu
 Tool_Menu TMenu[] = {
@@ -91,7 +92,8 @@ Tool_Menu TMenu[] = {
   {0x05,     EDID,        L"EDID"},
   {0x06,   SMBios,      L"SMBios"},
   {0x07,  USBView,     L"USBView"},
-  {0x08, Variable,    L"Variable"}
+  {0x08, Variable,    L"Variable"},
+  {0x09,   About,        L"About"}
 };
 
 #endif
