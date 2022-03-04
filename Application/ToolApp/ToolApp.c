@@ -7,7 +7,7 @@ VOID SMBus(){return;}
 VOID EDID(){return;}
 VOID SMBios(){return;}
 VOID USBView(){return;}
-VOID Variable(){return;}
+// VOID Variable(){return;}
 
 VOID tool()
 {
@@ -24,7 +24,7 @@ VOID tool()
   gST->ConOut->ClearScreen(gST->ConOut);
   // Disable show Curson  
   gST->ConOut->EnableCursor(gST->ConOut, FALSE);  
-  //save current Mode  
+  //save current Mode  1111111111111
   CurrMode = gST->ConOut->Mode->Mode;  
   //set mode
   gST->ConOut->SetMode(gST->ConOut, 0);

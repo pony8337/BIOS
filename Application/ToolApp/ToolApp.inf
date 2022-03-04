@@ -10,6 +10,7 @@
   ToolApp.c
   COMFunction.c
   CMOS.c
+  Variable.c
   About.c
 
 [Packages]
@@ -21,4 +22,5 @@
   ShellCEntryLib
   IoLib
   BaseMemoryLib
+  MemoryAllocationLib
 

@@ -11,14 +11,16 @@ VOID About()
 	gotoXY(5, 6);
 	Print(L"=            UEFI     R/W      Tool             =");
 	gotoXY(5, 7);
-	Print(L"=                 Version: 0.1                  =");
+	Print(L"=                Compal SPT/SW2                 =");
 	gotoXY(5, 8);
-	Print(L"=                    2022.03                    =");
+	Print(L"=                   Pony Yang                   =");
 	gotoXY(5, 9);
-	Print(L"=           Compal SPT/SW2 Pony_Yang            =");
-	gotoXY(5, 10);
 	Print(L"=              Pony_Yang@compal.com             =");
+	gotoXY(5, 10);
+	Print(L"=                 Version: 0.1                  =");
 	gotoXY(5, 11);
+	Print(L"=                    2022.03                    =");
+	gotoXY(5, 12);
 	Print(L"=================================================");
 	do {
 		gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &Index);

@@ -6,9 +6,11 @@
 #include <Library/UefiLib.h>
 #include <Library/ShellCEntryLib.h>
 #include <Library/BaseMemoryLib.h>
+#include <Library/MemoryAllocationLib.h>
 
 extern EFI_SYSTEM_TABLE     *gST;
 extern EFI_BOOT_SERVICES    *gBS;
+extern EFI_RUNTIME_SERVICES *gRT;
 
 // CMOS
 #define CMOS_PORT       0x70

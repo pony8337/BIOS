@@ -39,7 +39,7 @@ VOID CMOS() {
   ZeroMem(CMOSData, 256*sizeof(UINT8));
   gotoXY(0, 0);
   SetColor(EFI_LIGHTGRAY);
-  Print(L"CMOS - 70/71\n");
+  Print(L"CMOS [70/71]\n");
   //Table offset
   SetColor(EFI_BROWN);
   for(Index = 0; Index <= 0xF; Index++){
