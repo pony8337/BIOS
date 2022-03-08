@@ -6,35 +6,95 @@
 #include <Library/UefiLib.h>
 #include <Library/ShellCEntryLib.h>
 #include <Library/BaseMemoryLib.h>
+#include <Library/BaseLib.h>
+#include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
 
-extern EFI_SYSTEM_TABLE     *gST;
-extern EFI_BOOT_SERVICES    *gBS;
-extern EFI_RUNTIME_SERVICES *gRT;
+extern EFI_SYSTEM_TABLE           *gST;
+extern EFI_BOOT_SERVICES          *gBS;
+extern EFI_RUNTIME_SERVICES       *gRT;
 
-// CMOS
-#define CMOS_PORT       0x70
-#define CMOS_VALUE      0x71
+// CMOS 
+#define CMOS_PORT                 0x70
+#define CMOS_VALUE                0x71
 
-#define DELAY_TIME      10000000
+#define RTC_SECONDs               0x00
+#define RTC_MINUTES               0x02
+#define RTC_HOURS                 0x04
+#define RTC_DATE                  0x07
+#define RTC_MONTH                 0x08
+#define RTC_YEAR                  0x09
 
-#define SetColor(color) gST->ConOut->SetAttribute(gST->ConOut, color)
-#define gotoXY(x, y)    gST->ConOut->SetCursorPosition(gST->ConOut, x, y)
+// Variable
+#define MAX_VARIABLE_NUM          100
+#define CleanVariableName         Print(L"                                                                                ")
+typedef struct {    
+    CHAR16     VariableName[100];
+    UINTN      VariableSize;
+    CHAR16     Attributes[20];
+    EFI_GUID   VendorGuid;
+} VARIABLE_INFO;
 
-#define offsetX(offset) 3 * (offset % 16) + 3
-#define offsetY(offset) (offset / 16) + 3
 
-// Index Label
-#define rowX(x)         3 * x + 3
-#define rowY(y)         2
-#define columnX(x)      0
-#define columnY(y)      y + 3
+#define DELAY_TIME                10000000
 
-#define IsDigital(Data) (BOOLEAN)\
-                        (Data >= 0x30 && Data <= 0x39) || \
-                        (Data >= 0x41 && Data <= 0x5A) || \
-                        (Data >= 0x61 && Data <= 0x7A)
+#define SetColor(color)           gST->ConOut->SetAttribute(gST->ConOut, color)
+#define gotoXY(x, y)              gST->ConOut->SetCursorPosition(gST->ConOut, x, y)
 
+
+#define Block_Boundary            Print(L"********************************************************************************")
+
+//   --------------------------------
+//   |               |              |
+//   |    Block A    |    Block B   |
+//   |               |              |
+//   ********************************
+//   |               |              |
+//   |               |              |
+//   |    Block C    |    Block D   |
+//   |               |              |
+//   |               |              |
+//   --------------------------------
+
+//
+// Block A
+//
+#define BlockA_Function_Name_X    0
+#define BlockA_Function_Name_Y    0
+#define BlockA_Function_Detail_X  0
+#define BlockA_Function_Detail_Y  1
+#define BlockA_Boundary_X         0
+#define BlockA_Boundary_Y         2
+
+//
+// Block B
+// 
+#define BlockB_Page_Num_X         72
+#define BlockB_Page_Num_Y         0
+#define BlockB_Information_X      59
+#define BlockB_Information_Y      1
+
+//
+// Block C
+// 
+#define BlockC_RowX(x)            3 * x + 3
+#define BlockC_RowY(y)            3
+#define BlockC_ColumnX(x)         0
+#define BlockC_ColumnY(y)         y + 4
+#define BlockC_OffsetX(offset)    3 * (offset % 16) + 3
+#define BlockC_OffsetY(offset)    (offset / 16) + 4
+
+//
+// Block D
+// 
+#define BlockD_Info_X             52
+#define BlockD_Info_Y             3
+
+
+#define IsDigital(Data)           (BOOLEAN)\
+                                  (Data >= 0x30 && Data <= 0x39) || \
+                                  (Data >= 0x41 && Data <= 0x5A) || \
+                                  (Data >= 0x61 && Data <= 0x7A)
 typedef struct {
     UINT8   FunNo;
     VOID    (*FuncPtr)();

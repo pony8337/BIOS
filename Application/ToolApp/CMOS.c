@@ -13,8 +13,28 @@ VOID updateCMOSData (
     if(DataArray[x] != Data) {
       DataArray[x] = Data;  
       x == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
-      gotoXY(offsetX(x), offsetY(x));
+      gotoXY(BlockC_OffsetX(x), BlockC_OffsetY(x));
       Print(L"%02x ", DataArray[x]);
+      SetColor(EFI_WHITE);
+      if(x == RTC_YEAR) {
+        gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 1);
+        Print(L"%02x", DataArray[RTC_YEAR]);
+      } else if(x == RTC_MONTH) {
+        gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 1);
+        Print(L"%02x", DataArray[RTC_MONTH]);
+      } else if(x == RTC_DATE) {
+        gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 1);
+        Print(L"%02x", DataArray[RTC_DATE]);
+      } else if(x == RTC_HOURS) {
+        gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 2);
+        Print(L"%02x", DataArray[RTC_HOURS]);
+      } else if(x == RTC_MINUTES) {
+        gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 2);
+        Print(L"%02x", DataArray[RTC_MINUTES]);
+      } else if(x == RTC_SECONDs) {
+        gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 2);
+        Print(L"%02x", DataArray[RTC_SECONDs]);
+      }
     }
   }
   return ;
@@ -37,23 +57,47 @@ VOID CMOS() {
   InputData = 0;
   InputMode = FALSE;
   ZeroMem(CMOSData, 256*sizeof(UINT8));
-  gotoXY(0, 0);
+  // Block A
   SetColor(EFI_LIGHTGRAY);
-  Print(L"CMOS [70/71]\n");
-  //Table offset
+  gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
+  Print(L"# CMOS #");
+  gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+  Print(L"[ 0x70 / 0x71 ]");
+  gotoXY(BlockA_Boundary_X, BlockA_Boundary_Y);
+  Block_Boundary;
+  // Block B
+  SetColor(EFI_LIGHTGRAY);
+  gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
+  Print(L"Page:1/1");
+  // Block C
   SetColor(EFI_BROWN);
   for(Index = 0; Index <= 0xF; Index++){
-    gotoXY(rowX(Index), rowY(Index));
+    gotoXY(BlockC_RowX(Index), BlockC_RowY(Index));
     Print(L"%02x", Index);
-    gotoXY(columnX(Index), columnY(Index));
+    gotoXY(BlockC_ColumnX(Index), BlockC_ColumnY(Index));
     Print(L"%01x0", Index);
   }
-
+  
   for(Index = 0; Index <= 0xFF; Index++) {
     Index == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
-    gotoXY(offsetX(Index), offsetY(Index));
+    gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
     Print(L"%02x ", CMOSData[Index]);
   }
+  // Block D
+  SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X, BlockD_Info_Y);
+  Print(L"[ CMOS RTC Information ]");
+  gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
+  SetColor(EFI_LIGHTRED);
+  Print(L"RTC Date: ");
+  SetColor(EFI_WHITE);
+  Print(L"%02x / %02x / %02x", CMOSData[RTC_YEAR], CMOSData[RTC_MONTH], CMOSData[RTC_DATE]);
+  gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
+  SetColor(EFI_LIGHTRED);
+  Print(L"RTC Time: ");
+  SetColor(EFI_WHITE);
+  Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);
+
 
   //Update CMOS Data
   updateCMOSData(&CMOSData[0], (UINT8)offset);
@@ -91,7 +135,7 @@ VOID CMOS() {
         if(key.UnicodeChar == CHAR_BACKSPACE && InputMode) {
           InputData >>= 4;
           SetColor(EFI_WHITE);
-          gotoXY(offsetX(offset), offsetY(offset));
+          gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
           Print(L"%02x ", InputData);
         } else if (key.UnicodeChar == 0x0D && InputMode) {
           IoWrite8(CMOS_PORT, (UINT8)offset);

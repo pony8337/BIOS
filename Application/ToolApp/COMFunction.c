@@ -15,10 +15,10 @@ MoveCursor (
   )
 {
 	SetColor(EFI_LIGHTGRAY);
-	gotoXY(offsetX(Old), offsetY(Old));
+	gotoXY(BlockC_OffsetX(Old), BlockC_OffsetY(Old));
 	Print(L"%02x ", Data[Old]);
 	SetColor(EFI_WHITE);
-	gotoXY(offsetX(New), offsetY(New));
+	gotoXY(BlockC_OffsetX(New), BlockC_OffsetY(New));
 	Print(L"%02x ", Data[New]);
 	return New;
 }
@@ -41,19 +41,19 @@ ChangeInputData (
 	if (InputData >= '0' && InputData <= '9') {
 		Data = (Data << 4) | (UINT8)(InputData - '0');
 		SetColor(EFI_WHITE);
-		gotoXY(offsetX(offset), offsetY(offset));
+		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
 	} else if (InputData >= 'a' && InputData <= 'f') {
 		Data = (Data << 4) | (UINT8)(InputData - 'a' + 10);
 		SetColor(EFI_WHITE);
-		gotoXY(offsetX(offset), offsetY(offset));
+		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
 	} else if (InputData >= 'A' && InputData <= 'F') {
 		Data = (Data << 4) | (UINT8)(InputData - 'A' + 10);
 		SetColor(EFI_WHITE);
-		gotoXY(offsetX(offset), offsetY(offset));
+		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
 	}
