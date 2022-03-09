@@ -59,3 +59,25 @@ ChangeInputData (
 	}
 	return Data;
 }
+
+/*
+  @param  SourceData data buffer.
+  @param  DataSize   data size.
+  @param  CurrPage 	 current data page. (one page 256)
+  @param  DataArray  data array which show on the screen.
+*/
+VOID
+UpdateArrayData (
+  IN  	 UINT8  *SourceData,
+  IN  	 UINTN  DataSize,
+  IN 	 UINTN  CurrPage,
+  IN OUT UINT8  *DataArray
+  )
+{
+	UINTN  StartData;
+  	UINTN  Index;
+  	StartData = (CurrPage - 1) * 256;
+  	for(Index = 0; Index < 256; Index++)
+    	DataArray[Index] = (StartData + Index) < DataSize ? SourceData[StartData + Index] : 0xFF;
+	return ;
+}

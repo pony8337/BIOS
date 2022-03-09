@@ -10,24 +10,29 @@
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
 
-extern EFI_SYSTEM_TABLE           *gST;
-extern EFI_BOOT_SERVICES          *gBS;
-extern EFI_RUNTIME_SERVICES       *gRT;
+extern EFI_SYSTEM_TABLE             *gST;
+extern EFI_BOOT_SERVICES            *gBS;
+extern EFI_RUNTIME_SERVICES         *gRT;
 
 // CMOS 
-#define CMOS_PORT                 0x70
-#define CMOS_VALUE                0x71
+#define CMOS_PORT                   0x70
+#define CMOS_VALUE                  0x71
 
-#define RTC_SECONDs               0x00
-#define RTC_MINUTES               0x02
-#define RTC_HOURS                 0x04
-#define RTC_DATE                  0x07
-#define RTC_MONTH                 0x08
-#define RTC_YEAR                  0x09
+#define RTC_SECONDs                 0x00
+#define RTC_MINUTES                 0x02
+#define RTC_HOURS                   0x04
+#define RTC_DATE                    0x07
+#define RTC_MONTH                   0x08
+#define RTC_YEAR                    0x09
 
 // Variable
-#define MAX_VARIABLE_NUM          100
-#define CleanVariableName         Print(L"                                                                                ")
+#define MAX_VARIABLE_NUM            100
+#define VARIABLE_LIST_Y             2
+#define VARIABLE_LIST_NAME_X        0
+#define VARIABLE_LIST_SIZE_X        36
+#define VARIABLE_LIST_GUID_X        44
+
+#define CleanData                   Print(L"                                                                                ")
 typedef struct {    
     CHAR16     VariableName[100];
     UINTN      VariableSize;
@@ -36,13 +41,13 @@ typedef struct {
 } VARIABLE_INFO;
 
 
-#define DELAY_TIME                10000000
+#define DELAY_TIME                  10000000
 
-#define SetColor(color)           gST->ConOut->SetAttribute(gST->ConOut, color)
-#define gotoXY(x, y)              gST->ConOut->SetCursorPosition(gST->ConOut, x, y)
+#define SetColor(color)             gST->ConOut->SetAttribute(gST->ConOut, color)
+#define gotoXY(x, y)                gST->ConOut->SetCursorPosition(gST->ConOut, x, y)
 
 
-#define Block_Boundary            Print(L"********************************************************************************")
+#define Block_Boundary              Print(L"********************************************************************************")
 
 //   --------------------------------
 //   |               |              |
@@ -59,42 +64,42 @@ typedef struct {
 //
 // Block A
 //
-#define BlockA_Function_Name_X    0
-#define BlockA_Function_Name_Y    0
-#define BlockA_Function_Detail_X  0
-#define BlockA_Function_Detail_Y  1
-#define BlockA_Boundary_X         0
-#define BlockA_Boundary_Y         2
+#define BlockA_Function_Name_X      0
+#define BlockA_Function_Name_Y      0
+#define BlockA_Function_Detail_X    0
+#define BlockA_Function_Detail_Y    1
+#define BlockA_Boundary_X           0
+#define BlockA_Boundary_Y           2
 
 //
 // Block B
 // 
-#define BlockB_Page_Num_X         72
-#define BlockB_Page_Num_Y         0
-#define BlockB_Information_X      59
-#define BlockB_Information_Y      1
+#define BlockB_Page_Num_X           72
+#define BlockB_Page_Num_Y           0
+#define BlockB_Information_X        59
+#define BlockB_Information_Y        1
 
 //
 // Block C
 // 
-#define BlockC_RowX(x)            3 * x + 3
-#define BlockC_RowY(y)            3
-#define BlockC_ColumnX(x)         0
-#define BlockC_ColumnY(y)         y + 4
-#define BlockC_OffsetX(offset)    3 * (offset % 16) + 3
-#define BlockC_OffsetY(offset)    (offset / 16) + 4
+#define BlockC_RowX(offset)         3 * offset + 3
+#define BlockC_RowY(offset)         3
+#define BlockC_ColumnX(offset)      0
+#define BlockC_ColumnY(offset)      offset + 4
+#define BlockC_OffsetX(offset)      3 * (offset % 16) + 3
+#define BlockC_OffsetY(offset)      (offset / 16) + 4
 
 //
 // Block D
 // 
-#define BlockD_Info_X             52
-#define BlockD_Info_Y             3
+#define BlockD_Info_X               52
+#define BlockD_Info_Y               3
+#define BlockD_ShowASCII_X(offset)  offset % 16 + 54      
 
-
-#define IsDigital(Data)           (BOOLEAN)\
-                                  (Data >= 0x30 && Data <= 0x39) || \
-                                  (Data >= 0x41 && Data <= 0x5A) || \
-                                  (Data >= 0x61 && Data <= 0x7A)
+#define IsDigital(Data)             (BOOLEAN)\
+                                    (Data >= 0x30 && Data <= 0x39) || \
+                                    (Data >= 0x41 && Data <= 0x5A) || \
+                                    (Data >= 0x61 && Data <= 0x7A)
 typedef struct {
     UINT8   FunNo;
     VOID    (*FuncPtr)();
@@ -129,6 +134,21 @@ ChangeInputData (
   IN  CHAR16 InputData,
   IN  UINTN  offset
 );
+
+/*
+  @param  SourceData data buffer.
+  @param  DataSize   data size.
+  @param  CurrPage 	 current data page. (one page 256)
+  @param  DataArray  data array which show on the screen.
+*/
+VOID
+UpdateArrayData (
+  IN  	 UINT8  *SourceData,
+  IN  	 UINTN  DataSize,
+  IN 	 UINTN  CurrPage,
+  IN OUT UINT8  *DataArray
+);
+
 
 //
 // Tool Function

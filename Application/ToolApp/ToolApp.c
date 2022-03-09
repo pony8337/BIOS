@@ -20,11 +20,11 @@ VOID tool()
   EFI_STATUS    Status;
   EFI_INPUT_KEY key;
 
-  // Clean full screan
+  // Clean full screen
   gST->ConOut->ClearScreen(gST->ConOut);
   // Disable show Curson  
   gST->ConOut->EnableCursor(gST->ConOut, FALSE);  
-  //save current Mode  1111111111111
+  //save current Mode 
   CurrMode = gST->ConOut->Mode->Mode;  
   //set mode
   gST->ConOut->SetMode(gST->ConOut, 0);
