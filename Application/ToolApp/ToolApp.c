@@ -32,7 +32,7 @@ VOID tool()
   TotalNum = sizeof(TMenu) / sizeof(Tool_Menu);
   CurrPost = 0;
   for(y = 0; y < TotalNum; y++){
-    y == CurrPost ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
+    y == CurrPost ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR);
     gotoXY(x, y);
     Print(L"%s\n", TMenu[y].FunName);
   }
@@ -44,21 +44,21 @@ VOID tool()
       {
         case SCAN_DOWN:    
         case SCAN_RIGHT:   
-            SetColor(EFI_LIGHTGRAY);
+            SetColor(SHOW_DATA_COLOR);
             gotoXY(x, CurrPost);
             Print(L"%s\n", TMenu[CurrPost].FunName);
             CurrPost = (CurrPost + TotalNum + 1) % TotalNum;
-            SetColor(EFI_WHITE);
+            SetColor(SHOW_CHOOSE_DATA);
             gotoXY(x, CurrPost);
             Print(L"%s\n", TMenu[CurrPost].FunName);
         break;
         case SCAN_UP:
         case SCAN_LEFT:
-            SetColor(EFI_LIGHTGRAY);
+            SetColor(SHOW_DATA_COLOR);
             gotoXY(x, CurrPost);
             Print(L"%s\n", TMenu[CurrPost].FunName);
             CurrPost = (CurrPost + TotalNum - 1) % TotalNum;
-            SetColor(EFI_WHITE);
+            SetColor(SHOW_CHOOSE_DATA);
             gotoXY(x, CurrPost);
             Print(L"%s\n", TMenu[CurrPost].FunName);
         break;
@@ -67,7 +67,7 @@ VOID tool()
                 TMenu[CurrPost].FuncPtr();
                 gST->ConOut->ClearScreen(gST->ConOut); 
                 for(y = 0; y < TotalNum; y++){
-                    y == CurrPost ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
+                    y == CurrPost ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR);
                     gotoXY(x, y);
                     Print(L"%s\n", TMenu[y].FunName);
                 }
@@ -76,6 +76,7 @@ VOID tool()
       }
   } while(key.ScanCode != SCAN_ESC);
           
+  SetColor(SHOW_DATA_COLOR);
   //return back original mode
   gST->ConOut->SetMode(gST->ConOut, CurrMode);
   //clean full scan and leave

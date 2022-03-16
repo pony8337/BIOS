@@ -14,10 +14,10 @@ MoveCursor (
   IN  UINT8  *Data
   )
 {
-	SetColor(EFI_LIGHTGRAY);
+	Data[Old] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR);
 	gotoXY(BlockC_OffsetX(Old), BlockC_OffsetY(Old));
 	Print(L"%02x ", Data[Old]);
-	SetColor(EFI_WHITE);
+	SetColor(SHOW_CHOOSE_DATA);
 	gotoXY(BlockC_OffsetX(New), BlockC_OffsetY(New));
 	Print(L"%02x ", Data[New]);
 	return New;

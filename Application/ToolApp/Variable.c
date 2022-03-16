@@ -70,6 +70,8 @@ UINTN ScanVariable(
       VariableName = (CHAR16*)ReallocatePool(OldNameSize, NameSize, VariableName);
       continue;
     }
+    if (Status == EFI_NOT_FOUND) break;
+
     StrCpyS(VariableList[Num].VariableName, sizeof(VariableList[Num].VariableName), VariableName);
     DEBUG ((EFI_D_INFO, "VariableName = %s.\n", VariableList[Num].VariableName));
     VariableList[Num].VendorGuid = VariableGuid;
@@ -96,20 +98,20 @@ VOID ShowVariable (
   gotoXY(VARIABLE_LIST_NAME_X, VARIABLE_LIST_Y + Index);
   Print(L"%s", VariableInfo.VariableName);
   gotoXY(VARIABLE_LIST_SIZE_X, VARIABLE_LIST_Y + Index);
-  Print(L"%d", VariableInfo.VariableSize);
+  Print(L"%04x", VariableInfo.VariableSize);
   gotoXY(VARIABLE_LIST_GUID_X, VARIABLE_LIST_Y + Index);
   Print(L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", 
-              VariableInfo.VendorGuid.Data1,
-              VariableInfo.VendorGuid.Data2,
-              VariableInfo.VendorGuid.Data3,
-              VariableInfo.VendorGuid.Data4[0],
-              VariableInfo.VendorGuid.Data4[1],
-              VariableInfo.VendorGuid.Data4[2],
-              VariableInfo.VendorGuid.Data4[3],
-              VariableInfo.VendorGuid.Data4[4],
-              VariableInfo.VendorGuid.Data4[5],
-              VariableInfo.VendorGuid.Data4[6],
-              VariableInfo.VendorGuid.Data4[7]);
+                            VariableInfo.VendorGuid.Data1,
+                            VariableInfo.VendorGuid.Data2,
+                            VariableInfo.VendorGuid.Data3,
+                            VariableInfo.VendorGuid.Data4[0],
+                            VariableInfo.VendorGuid.Data4[1],
+                            VariableInfo.VendorGuid.Data4[2],
+                            VariableInfo.VendorGuid.Data4[3],
+                            VariableInfo.VendorGuid.Data4[4],
+                            VariableInfo.VendorGuid.Data4[5],
+                            VariableInfo.VendorGuid.Data4[6],
+                            VariableInfo.VendorGuid.Data4[7]);
   
 }
 
@@ -123,7 +125,7 @@ VOID ShowVariableListTitle (
   Print(L"Variable Name                       Size    GUID                         [%02d/%02d]", CurrPage, TotalPage);
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   SetColor(EFI_LIGHTGRAY);
-  Block_Boundary;
+  BLOCK_BOUNDARY;
 }
 
 VOID Variable()
@@ -185,9 +187,10 @@ VOID Variable()
           gST->ConOut->ClearScreen(gST->ConOut);
           CurrPage = CurrPage == 1 ? PageNum : CurrPage - 1;
           ShowVariableListTitle(CurrPage, PageNum);
-          for(Index = 0; Index < 20 && Index + CurrVariable < VariableNum; Index++) {
+          for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
             (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
-            ShowVariable(VariableList[CurrVariable + Index], Index);
+            // ShowVariable(VariableList[CurrVariable - Index], Index);
+            ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
           }
         } else {
           SetColor(EFI_LIGHTGRAY);
@@ -197,8 +200,15 @@ VOID Variable()
         }       
       break;
       case SCAN_NULL:
-          if(key.UnicodeChar == 0x0D) { // Enter Function
-             
+          // Enter Function
+          if(key.UnicodeChar == 0x0D) { 
+            VariableDetail(VariableList[CurrVariable]);
+            gST->ConOut->ClearScreen(gST->ConOut);
+            ShowVariableListTitle(CurrPage, PageNum);
+            for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
+              (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
+              ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
+            }
           }
       break;
     }

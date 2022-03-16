@@ -12,7 +12,7 @@ VOID updateCMOSData (
     Data = IoRead8(CMOS_VALUE); 
     if(DataArray[x] != Data) {
       DataArray[x] = Data;  
-      x == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
+      x == offset ? SetColor(SHOW_CHOOSE_DATA) : (DataArray[x] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
       gotoXY(BlockC_OffsetX(x), BlockC_OffsetY(x));
       Print(L"%02x ", DataArray[x]);
       SetColor(EFI_WHITE);
@@ -64,7 +64,7 @@ VOID CMOS() {
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   Print(L"[ 0x70 / 0x71 ]");
   gotoXY(BlockA_Boundary_X, BlockA_Boundary_Y);
-  Block_Boundary;
+  BLOCK_BOUNDARY;
   // Block B
   SetColor(EFI_LIGHTGRAY);
   gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
@@ -79,7 +79,7 @@ VOID CMOS() {
   }
   
   for(Index = 0; Index <= 0xFF; Index++) {
-    Index == offset ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY);
+    Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (CMOSData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
     gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
     Print(L"%02x ", CMOSData[Index]);
   }
@@ -88,14 +88,14 @@ VOID CMOS() {
   gotoXY(BlockD_Info_X, BlockD_Info_Y);
   Print(L"[ CMOS RTC Information ]");
   gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
-  SetColor(EFI_LIGHTRED);
+  SetColor(SHOW_DATA_COLOR);
   Print(L"RTC Date: ");
-  SetColor(EFI_WHITE);
+  SetColor(SHOW_CHOOSE_DATA);
   Print(L"%02x / %02x / %02x", CMOSData[RTC_YEAR], CMOSData[RTC_MONTH], CMOSData[RTC_DATE]);
   gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
-  SetColor(EFI_LIGHTRED);
+  SetColor(SHOW_DATA_COLOR);
   Print(L"RTC Time: ");
-  SetColor(EFI_WHITE);
+  SetColor(SHOW_CHOOSE_DATA);
   Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);
 
 
@@ -134,7 +134,7 @@ VOID CMOS() {
       case SCAN_NULL:
         if(key.UnicodeChar == CHAR_BACKSPACE && InputMode) {
           InputData >>= 4;
-          SetColor(EFI_WHITE);
+          SetColor(SHOW_CHOOSE_DATA);
           gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
           Print(L"%02x ", InputData);
         } else if (key.UnicodeChar == 0x0D && InputMode) {
