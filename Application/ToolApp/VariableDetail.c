@@ -13,7 +13,9 @@ VOID VariableDetail (
   UINTN         PageNum;
   UINT8         *VarData;
   UINT32        Attributes;
+  DISPLAY_MODE  DisplayMode;
 
+  DisplayMode = DISPLAY_ASCII;
   //clean full scream
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
@@ -71,16 +73,16 @@ VOID VariableDetail (
     gST->ConIn->ReadKeyStroke(gST->ConIn, &key);
     switch(key.ScanCode) {
       case SCAN_UP:
-        offset = MoveCursor(offset, (offset + 256 - 16) % 256, VariableData);
+        offset = MoveCursor(offset, (offset + 256 - 16) % 256, VariableData, DisplayMode);
       break;
       case SCAN_DOWN:
-        offset = MoveCursor(offset, (offset + 256 + 16) % 256, VariableData);
+        offset = MoveCursor(offset, (offset + 256 + 16) % 256, VariableData, DisplayMode);
       break;
       case SCAN_LEFT:
-        offset = MoveCursor(offset, (offset + 256 - 1) % 256, VariableData);
+        offset = MoveCursor(offset, (offset + 256 - 1) % 256, VariableData, DisplayMode);
       break;
       case SCAN_RIGHT:
-        offset = MoveCursor(offset, (offset + 256 + 1) % 256, VariableData);
+        offset = MoveCursor(offset, (offset + 256 + 1) % 256, VariableData, DisplayMode);
       break;
       case SCAN_PAGE_UP:
         DEBUG ((EFI_D_INFO, "\nSCAN_PAGE_UP\n"));
@@ -115,7 +117,10 @@ VOID VariableDetail (
         
       break;
       case SCAN_NULL:
-  
+        // TAB
+        if(key.UnicodeChar == EFI_KEY_TAB) { 
+          DEBUG ((EFI_D_INFO, "\nEFI_KEY_TAB\n"));
+        }
       break;
     }
   } while(key.ScanCode!=SCAN_ESC);  

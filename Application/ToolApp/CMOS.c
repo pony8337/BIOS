@@ -1,8 +1,9 @@
 #include "ToolApp.h"
 
 VOID updateCMOSData (
-  UINT8 *DataArray,
-  UINT8  offset
+  UINT8         *DataArray,
+  UINT8         offset,
+  DISPLAY_MODE  DisplayMode
   )
 {
   UINTN  x;
@@ -15,25 +16,41 @@ VOID updateCMOSData (
       x == offset ? SetColor(SHOW_CHOOSE_DATA) : (DataArray[x] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
       gotoXY(BlockC_OffsetX(x), BlockC_OffsetY(x));
       Print(L"%02x ", DataArray[x]);
-      SetColor(EFI_WHITE);
-      if(x == RTC_YEAR) {
-        gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 1);
-        Print(L"%02x", DataArray[RTC_YEAR]);
-      } else if(x == RTC_MONTH) {
-        gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 1);
-        Print(L"%02x", DataArray[RTC_MONTH]);
-      } else if(x == RTC_DATE) {
-        gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 1);
-        Print(L"%02x", DataArray[RTC_DATE]);
-      } else if(x == RTC_HOURS) {
-        gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 2);
-        Print(L"%02x", DataArray[RTC_HOURS]);
-      } else if(x == RTC_MINUTES) {
-        gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 2);
-        Print(L"%02x", DataArray[RTC_MINUTES]);
-      } else if(x == RTC_SECONDs) {
-        gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 2);
-        Print(L"%02x", DataArray[RTC_SECONDs]);
+      if(DisplayMode == DISPLAY_INFOR) {
+        switch(x) {
+          case RTC_YEAR:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 2);
+            Print(L"%02x", DataArray[RTC_YEAR]);
+            break;
+          case RTC_MONTH:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 2);
+            Print(L"%02x", DataArray[RTC_MONTH]);
+            break;
+          case RTC_DATE:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 2);
+            Print(L"%02x", DataArray[RTC_DATE]);
+            break;
+          case RTC_HOURS:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 4);
+            Print(L"%02x", DataArray[RTC_HOURS]);
+            break;
+          case RTC_MINUTES:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 4);
+            Print(L"%02x", DataArray[RTC_MINUTES]);
+            break;
+          case RTC_SECONDs:
+            SetColor(EFI_WHITE);
+            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 4);
+            Print(L"%02x", DataArray[RTC_SECONDs]);
+            break;
+        }
+      } else if (DisplayMode == DISPLAY_ASCII) {
+        ShowASCII(x, DataArray[x]);
       }
     }
   }
@@ -50,13 +67,15 @@ VOID CMOS() {
   BOOLEAN       InputMode;
   UINT8         InputData;
   UINT8         CMOSData[256];
+  DISPLAY_MODE  DisplayMode;
 
   //clean full scream
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
   InputData = 0;
   InputMode = FALSE;
-  ZeroMem(CMOSData, 256*sizeof(UINT8));
+  DisplayMode = DISPLAY_ASCII;
+  ZeroMem(CMOSData, 256 * sizeof(UINT8));
   // Block A
   SetColor(EFI_LIGHTGRAY);
   gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
@@ -82,25 +101,21 @@ VOID CMOS() {
     Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (CMOSData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
     gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
     Print(L"%02x ", CMOSData[Index]);
+    // Block D information
+    if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, CMOSData[Index]);
   }
   // Block D
-  SetColor(EFI_BROWN);
+  DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
   gotoXY(BlockD_Info_X, BlockD_Info_Y);
-  Print(L"[ CMOS RTC Information ]");
-  gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
-  SetColor(SHOW_DATA_COLOR);
-  Print(L"RTC Date: ");
-  SetColor(SHOW_CHOOSE_DATA);
-  Print(L"%02x / %02x / %02x", CMOSData[RTC_YEAR], CMOSData[RTC_MONTH], CMOSData[RTC_DATE]);
-  gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
-  SetColor(SHOW_DATA_COLOR);
-  Print(L"RTC Time: ");
-  SetColor(SHOW_CHOOSE_DATA);
-  Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);
-
-
+  Print(L"  Text ");
+  SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
+  Print(L"/");
+  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
+  Print(L" Information ");
   //Update CMOS Data
-  updateCMOSData(&CMOSData[0], (UINT8)offset);
+  updateCMOSData(CMOSData, (UINT8)offset, DisplayMode);
 
   do {
     // Set a timer event of 1 second expiration  
@@ -111,25 +126,25 @@ VOID CMOS() {
     // waiting event ... (Input Key or time to update data)
     gBS->WaitForEvent (2, WaitList, &EventIndex); 
     gBS->CloseEvent (TimerEvent);
-    updateCMOSData(&CMOSData[0], (UINT8)offset);
+    updateCMOSData(CMOSData, (UINT8)offset, DisplayMode);
     if(EventIndex == 1) continue;
     gST->ConIn->ReadKeyStroke(gST->ConIn, &key);
     switch(key.ScanCode) {
       case SCAN_UP:
         InputMode = FALSE;
-        offset = MoveCursor(offset, (offset + 256 - 16) % 256, CMOSData);
+        offset = MoveCursor(offset, (offset + 256 - 16) % 256, CMOSData, DisplayMode);
       break;
       case SCAN_DOWN:
         InputMode = FALSE;
-        offset = MoveCursor(offset, (offset + 256 + 16) % 256, CMOSData);
+        offset = MoveCursor(offset, (offset + 256 + 16) % 256, CMOSData, DisplayMode);
       break;
       case SCAN_LEFT:
         InputMode = FALSE;
-        offset = MoveCursor(offset, (offset + 256 - 1) % 256, CMOSData);
+        offset = MoveCursor(offset, (offset + 256 - 1) % 256, CMOSData, DisplayMode);
       break;
       case SCAN_RIGHT:
         InputMode = FALSE;
-        offset = MoveCursor(offset, (offset + 256 + 1) % 256, CMOSData);
+        offset = MoveCursor(offset, (offset + 256 + 1) % 256, CMOSData, DisplayMode);
       break;
       case SCAN_NULL:
         if(key.UnicodeChar == CHAR_BACKSPACE && InputMode) {
@@ -145,7 +160,30 @@ VOID CMOS() {
           InputData = InputMode ? InputData : 0;
           InputMode = TRUE;
           InputData = ChangeInputData(InputData, key.UnicodeChar, offset);
-        }    
+        } else if(key.UnicodeChar == EFI_KEY_TAB) {
+          // display mode
+          if(DisplayMode == DISPLAY_INFOR) {
+            DisplayMode = DISPLAY_ASCII;            
+            CleanBlockD(DisplayMode);
+            for(Index = 0; Index <= 0xFF; Index++) {
+              Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (CMOSData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
+              ShowASCII(Index, CMOSData[Index]);
+            }
+          } else if(DisplayMode == DISPLAY_ASCII) {
+            DisplayMode = DISPLAY_INFOR;
+            CleanBlockD(DisplayMode);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
+            SetColor(SHOW_DATA_COLOR);
+            Print(L"RTC Date: ");
+            SetColor(SHOW_CHOOSE_DATA);
+            Print(L"%02x / %02x / %02x", CMOSData[RTC_YEAR], CMOSData[RTC_MONTH], CMOSData[RTC_DATE]);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 4);
+            SetColor(SHOW_DATA_COLOR);
+            Print(L"RTC Time: ");
+            SetColor(SHOW_CHOOSE_DATA);
+            Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);
+          }
+        }
       break;
     }
   } while(key.ScanCode!=SCAN_ESC);  

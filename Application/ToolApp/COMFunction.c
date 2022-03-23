@@ -5,31 +5,36 @@
   @param  new  	New offset
   @param  data 	the data's pointer
 
-  @return new offset
+  @return new   offset
 */
 UINTN 
 MoveCursor (
-  IN  UINTN  Old,
-  IN  UINTN  New,
-  IN  UINT8  *Data
+  IN  UINTN         Old,
+  IN  UINTN         New,
+  IN  UINT8         *Data,
+  IN  DISPLAY_MODE  DispalyMode
   )
 {
 	Data[Old] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR);
 	gotoXY(BlockC_OffsetX(Old), BlockC_OffsetY(Old));
 	Print(L"%02x ", Data[Old]);
+  if(DispalyMode == DISPLAY_ASCII) ShowASCII(Old, Data[Old]);  
+
 	SetColor(SHOW_CHOOSE_DATA);
 	gotoXY(BlockC_OffsetX(New), BlockC_OffsetY(New));
 	Print(L"%02x ", Data[New]);
+  if(DispalyMode == DISPLAY_ASCII) ShowASCII(New, Data[New]);
+
 	return New;
 }
 
 
 /*
-  @param  Data  	 data buffer
-  @param  InputData  input value
-  @param  offset 	 data's offset
+  @param  Data  	    data buffer
+  @param  InputData   input value
+  @param  offset 	    data's offset
 
-  @return Data    	 the data after modified
+  @return Data    	  the data after modified
 */
 UINT8
 ChangeInputData (
@@ -80,4 +85,40 @@ UpdateArrayData (
   	for(Index = 0; Index < 256; Index++)
     	DataArray[Index] = (StartData + Index) < DataSize ? SourceData[StartData + Index] : 0xFF;
 	return ;
+}
+
+VOID 
+CleanBlockD (
+  IN  DISPLAY_MODE  DisplayMode
+)
+{
+  UINTN x;
+  DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X, BlockD_Info_Y);
+  Print(L"  Text ");
+  SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
+  Print(L"/");
+  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
+  Print(L" Information ");
+  for(x = 1; x <= 17; x++) {
+    gotoXY(BlockD_Info_X, BlockD_Info_Y + x); 
+    CLEAN_BLOCK_D;
+  }
+  return ;
+}
+
+/*
+  @param  Offset	data offset.
+  @param  Data   	data.
+*/
+VOID 
+ShowASCII (
+  IN	  UINTN offset,
+  IN    UINT8 data
+  )
+{
+  gotoXY(offset % 16 + BlockD_Info_X + 3 , BlockC_OffsetY(offset)); 
+  IsDigital(data) ? Print(L"%c", data) : Print(L".");
 }

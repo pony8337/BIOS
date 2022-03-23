@@ -74,6 +74,7 @@ extern EFI_RUNTIME_SERVICES         *gRT;
 #define SHOW_DATA_COLOR             EFI_LIGHTGRAY   
 #define NO_DATA_COLOR               EFI_DARKGRAY   
 
+#define EFI_KEY_TAB                 0x09
 #define CLEAN_DATA                  Print(L"                                                                                ")
 #define DELAY_TIME                  10000000
 #define SetColor(color)             gST->ConOut->SetAttribute(gST->ConOut, color)
@@ -123,6 +124,8 @@ extern EFI_RUNTIME_SERVICES         *gRT;
 #define BlockD_Info_X               52
 #define BlockD_Info_Y               3
 #define BlockD_ShowASCII_X(offset)  offset % 16 + 54      
+#define CLEAN_BLOCK_D               Print(L"                         ")
+
 
 #define IsDigital(Data)             (BOOLEAN)\
                                     (Data >= 0x30 && Data <= 0x39) || \
@@ -134,18 +137,25 @@ typedef struct {
     CHAR16  *FunName;
 } Tool_Menu;
 
+typedef enum {
+    DISPLAY_INFOR,
+    DISPLAY_ASCII
+} DISPLAY_MODE;
+
 /*
-  @param  old  	Old offset
-  @param  new  	New offset
-  @param  data 	The data's pointer
+  @param  old  	        Old offset
+  @param  new  	        New offset
+  @param  data 	        The data's pointer
+  @param  DisplayMode   Show Block D or not
 
   @return new offset
 */
 UINTN 
-MoveCursor(
-  IN  UINTN  Old,
-  IN  UINTN  New,
-  IN  UINT8 *Data
+MoveCursor (
+  IN  UINTN         Old,
+  IN  UINTN         New,
+  IN  UINT8         *Data,
+  IN  DISPLAY_MODE  DispalyMode
 );
 
 /*
@@ -176,6 +186,23 @@ UpdateArrayData (
   IN OUT UINT8  *DataArray
 );
 
+/*
+  @param  DisplayMode	  Block D show information.
+*/
+VOID 
+CleanBlockD (
+  IN  DISPLAY_MODE  DisplayMode
+);
+
+/*
+  @param  Offset	data offset.
+  @param  Data   	data.
+*/
+VOID 
+ShowASCII (
+  IN    UINTN offset,
+  IN    UINT8 data
+);
 
 // Tool Function
 VOID CMOS();
