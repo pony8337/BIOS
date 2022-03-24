@@ -45,7 +45,7 @@ VOID VariableDetail (
   CurrPage = 1;
   PageNum = (VariableInfo.VariableSize % 256) == 0 ? VariableInfo.VariableSize / 256 : VariableInfo.VariableSize / 256 + 1;
   Print(L"Page:%d/%d", CurrPage, PageNum);
-  
+   
   ZeroMem(VariableData, 256 * sizeof(UINT8));
   // Get Variable Data
   VarData = (UINT8*)mGetVariable(VariableInfo.VariableName, &VariableInfo.VendorGuid, &VariableInfo.VariableSize, &Attributes);
@@ -64,9 +64,22 @@ VOID VariableDetail (
     Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
     gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
     Print(L"%02x ", VariableData[Index]);
+    // Block D information
+    if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, VariableData[Index]);
   }
   // Block D
+  DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X, BlockD_Info_Y);
+  Print(L"  Text ");
+  SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
+  Print(L"/");
+  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
+  Print(L" Information ");
+  
 
+  // key event
   do {
     gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &EventIndex); 
     if(EventIndex == 1) continue;
@@ -119,7 +132,28 @@ VOID VariableDetail (
       case SCAN_NULL:
         // TAB
         if(key.UnicodeChar == EFI_KEY_TAB) { 
-          DEBUG ((EFI_D_INFO, "\nEFI_KEY_TAB\n"));
+           // display mode
+          if(DisplayMode == DISPLAY_INFOR) {
+            DisplayMode = DISPLAY_ASCII;            
+            CleanBlockD(DisplayMode);
+            for(Index = 0; Index <= 0xFF; Index++) {
+              Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
+              ShowASCII(Index, VariableData[Index]);
+            }
+          } else if(DisplayMode == DISPLAY_ASCII) {
+            DisplayMode = DISPLAY_INFOR;
+            CleanBlockD(DisplayMode);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
+            SetColor(BLOCKD_TITLE_COLOR);
+            Print(L"Size: "); 
+            SetColor(SHOW_CHOOSE_DATA);
+            Print(L"%03x", VariableInfo.VariableSize);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
+            SetColor(BLOCKD_TITLE_COLOR);
+            Print(L"Attribute: "); 
+            SetColor(SHOW_CHOOSE_DATA);
+            Print(L"%s", VariableInfo.Attributes);
+          }
         }
       break;
     }

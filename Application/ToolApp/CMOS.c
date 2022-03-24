@@ -20,32 +20,32 @@ VOID updateCMOSData (
         switch(x) {
           case RTC_YEAR:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 2);
+            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 1);
             Print(L"%02x", DataArray[RTC_YEAR]);
             break;
           case RTC_MONTH:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 2);
+            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 1);
             Print(L"%02x", DataArray[RTC_MONTH]);
             break;
           case RTC_DATE:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 2);
+            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 1);
             Print(L"%02x", DataArray[RTC_DATE]);
             break;
           case RTC_HOURS:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 4);
+            gotoXY(BlockD_Info_X + 10, BlockD_Info_Y + 2);
             Print(L"%02x", DataArray[RTC_HOURS]);
             break;
           case RTC_MINUTES:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 4);
+            gotoXY(BlockD_Info_X + 15, BlockD_Info_Y + 2);
             Print(L"%02x", DataArray[RTC_MINUTES]);
             break;
           case RTC_SECONDs:
             SetColor(EFI_WHITE);
-            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 4);
+            gotoXY(BlockD_Info_X + 20, BlockD_Info_Y + 2);
             Print(L"%02x", DataArray[RTC_SECONDs]);
             break;
         }
@@ -172,13 +172,13 @@ VOID CMOS() {
           } else if(DisplayMode == DISPLAY_ASCII) {
             DisplayMode = DISPLAY_INFOR;
             CleanBlockD(DisplayMode);
-            gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
-            SetColor(SHOW_DATA_COLOR);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
+            SetColor(BLOCKD_TITLE_COLOR);
             Print(L"RTC Date: ");
             SetColor(SHOW_CHOOSE_DATA);
             Print(L"%02x / %02x / %02x", CMOSData[RTC_YEAR], CMOSData[RTC_MONTH], CMOSData[RTC_DATE]);
-            gotoXY(BlockD_Info_X, BlockD_Info_Y + 4);
-            SetColor(SHOW_DATA_COLOR);
+            gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
+            SetColor(BLOCKD_TITLE_COLOR);
             Print(L"RTC Time: ");
             SetColor(SHOW_CHOOSE_DATA);
             Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);

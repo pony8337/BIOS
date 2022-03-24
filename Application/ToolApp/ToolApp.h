@@ -121,10 +121,11 @@ extern EFI_RUNTIME_SERVICES         *gRT;
 
 
 // Block D
+#define BLOCKD_TITLE_COLOR          EFI_LIGHTRED
 #define BlockD_Info_X               52
 #define BlockD_Info_Y               3
 #define BlockD_ShowASCII_X(offset)  offset % 16 + 54      
-#define CLEAN_BLOCK_D               Print(L"                         ")
+#define CLEAN_BLOCK_D               Print(L"                            ")
 
 
 #define IsDigital(Data)             (BOOLEAN)\
