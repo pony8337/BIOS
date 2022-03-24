@@ -146,12 +146,12 @@ VOID VariableDetail (
             gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
             SetColor(BLOCKD_TITLE_COLOR);
             Print(L"Size: "); 
-            SetColor(SHOW_CHOOSE_DATA);
+            SetColor(SHOW_DATA_COLOR);
             Print(L"%03x", VariableInfo.VariableSize);
             gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
             SetColor(BLOCKD_TITLE_COLOR);
             Print(L"Attribute: "); 
-            SetColor(SHOW_CHOOSE_DATA);
+            SetColor(SHOW_DATA_COLOR);
             Print(L"%s", VariableInfo.Attributes);
           }
         }

@@ -97,11 +97,11 @@ ShellAppMain (
   Print(L"TEST %d\n", Argc);
   if(Argc == 1) {
      tool();
-   }// else if(Argv[1][0] == '-' || '/'){
-  //   Print(L"TEST3\n");
-  // } else {
-  //   Print(L"use -h for help\n");
-  // }
+   } else if(Argc == 3){
+     Print(L"TEST3\n");
+  } else {
+    Print(L"use -h for help\n");
+  }
 
   return 0;
 }

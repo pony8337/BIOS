@@ -6,6 +6,7 @@ VOID About()
 	UINTN          Index;
 	//clean full scream
 	gST->ConOut->ClearScreen(gST->ConOut);
+	SetColor(SHOW_DATA_COLOR);
 	gotoXY(5, 5);
 	Print(L"=================================================");
 	gotoXY(5, 6);

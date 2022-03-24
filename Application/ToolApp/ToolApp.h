@@ -70,9 +70,9 @@ extern EFI_SYSTEM_TABLE             *gST;
 extern EFI_BOOT_SERVICES            *gBS;
 extern EFI_RUNTIME_SERVICES         *gRT;
        
-#define SHOW_CHOOSE_DATA            EFI_WHITE
-#define SHOW_DATA_COLOR             EFI_LIGHTGRAY   
-#define NO_DATA_COLOR               EFI_DARKGRAY   
+#define SHOW_CHOOSE_DATA            EFI_LIGHTGREEN
+#define SHOW_DATA_COLOR             EFI_WHITE 
+#define NO_DATA_COLOR               EFI_LIGHTGRAY     
 
 #define EFI_KEY_TAB                 0x09
 #define CLEAN_DATA                  Print(L"                                                                                ")
