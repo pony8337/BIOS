@@ -10,8 +10,8 @@
   ToolApp.c
   COMFunction.c
   CMOS.c
-  Variable.c
-  VariableDetail.c
+  # Variable.c
+  # VariableDetail.c
   About.c
 
 [Packages]
