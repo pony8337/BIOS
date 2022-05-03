@@ -57,10 +57,12 @@ VOID
 );
 
 /*
-  @param  VariableInfo  Variable information
+  @param  Select variable Information
 */
 VOID
-VariableDetail ();
+VariableDetail (
+    IN  VARIABLE_INFO VariableInfo
+);
 
 
 //

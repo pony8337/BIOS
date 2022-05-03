@@ -1,7 +1,7 @@
 #include "ToolApp.h"
 
 VOID VariableDetail (
-    // IN  VARIABLE_INFO VariableInfo
+    IN  VARIABLE_INFO VariableInfo
 )
 {
   EFI_INPUT_KEY key;
@@ -22,7 +22,11 @@ VOID VariableDetail (
   // Block A
   SetColor(EFI_LIGHTGRAY);
   gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
-  Print(L"# %s #", VariableInfo.VariableName);
+  Print(L"[ ");
+  SetColor(EFI_LIGHTGREEN); 
+  Print(L"%s", VariableInfo.VariableName);
+  SetColor(EFI_LIGHTGRAY);
+  Print(L" ]");
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   Print(L"GUID: ");
   Print(L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", 
@@ -103,7 +107,7 @@ VOID VariableDetail (
         CurrPage = CurrPage == 1 ? PageNum : CurrPage - 1;
         UpdateArrayData(VarData, VariableInfo.VariableSize, CurrPage, VariableData);
         // update display data
-        SetColor(EFI_LIGHTGRAY);
+        SetColor(SHOW_DATA_COLOR);
         gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
         Print(L"Page:%d/%d", CurrPage, PageNum);
         for(Index = 0; Index <= 0xFF; Index++) {
@@ -119,7 +123,7 @@ VOID VariableDetail (
         CurrPage = CurrPage == PageNum ? 1 : CurrPage + 1;
         UpdateArrayData(VarData, VariableInfo.VariableSize, CurrPage, VariableData);
         // update display data
-        SetColor(EFI_LIGHTGRAY);
+        SetColor(SHOW_DATA_COLOR);
         gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
         Print(L"Page:%d/%d", CurrPage, PageNum);
         for(Index = 0; Index <= 0xFF; Index++) {

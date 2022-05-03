@@ -143,14 +143,13 @@ VOID Variable()
   gST->ConOut->ClearScreen(gST->ConOut);
   VariableNum = ScanVariable();
 
-  // Print(L"Test=%d\n", VariableNum);
   CurrVariable = 0;
   // Variable List
   CurrPage = 1;
   PageNum = (VariableNum % 20) == 0 ? VariableNum / 20 : VariableNum / 20 + 1;
   ShowVariableListTitle(CurrPage, PageNum);
   for(Index = 0; Index < 20; Index++) {
-    (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
+    (CurrVariable % 20) == Index ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR); 
     ShowVariable(VariableList[Index], Index);
   }
 
@@ -168,13 +167,13 @@ VOID Variable()
           CurrPage = CurrPage == PageNum ? 1 : CurrPage + 1;
           ShowVariableListTitle(CurrPage, PageNum);
           for(Index = 0; Index < 20 && Index + CurrVariable < VariableNum; Index++) {
-            (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
+            (CurrVariable % 20) == Index ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR); 
             ShowVariable(VariableList[CurrVariable + Index], Index);
           }
         } else {
-          SetColor(EFI_LIGHTGRAY);
+          SetColor(SHOW_DATA_COLOR);
           ShowVariable(VariableList[PreVariable], PreVariable % 20);
-          SetColor(EFI_WHITE);
+          SetColor(SHOW_CHOOSE_DATA);
           ShowVariable(VariableList[CurrVariable], CurrVariable % 20);
         }
       break;
@@ -188,28 +187,27 @@ VOID Variable()
           CurrPage = CurrPage == 1 ? PageNum : CurrPage - 1;
           ShowVariableListTitle(CurrPage, PageNum);
           for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
-            (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
-            // ShowVariable(VariableList[CurrVariable - Index], Index);
+            (CurrVariable % 20) == Index ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR); 
             ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
           }
         } else {
-          SetColor(EFI_LIGHTGRAY);
+          SetColor(SHOW_DATA_COLOR);
           ShowVariable(VariableList[PreVariable], PreVariable % 20);
-          SetColor(EFI_WHITE);
+          SetColor(SHOW_CHOOSE_DATA);
           ShowVariable(VariableList[CurrVariable], CurrVariable % 20);
         }       
       break;
       case SCAN_NULL:
           // Enter Function
-          // if(key.UnicodeChar == 0x0D) { 
-          //   VariableDetail(VariableList[CurrVariable]);
-          //   gST->ConOut->ClearScreen(gST->ConOut);
-          //   ShowVariableListTitle(CurrPage, PageNum);
-          //   for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
-          //     (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
-          //     ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
-          //   }
-          // }
+          if(key.UnicodeChar == 0x0D) { 
+            VariableDetail(VariableList[CurrVariable]);
+            gST->ConOut->ClearScreen(gST->ConOut);
+            ShowVariableListTitle(CurrPage, PageNum);
+            for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
+              (CurrVariable % 20) == Index ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR); 
+              ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
+            }
+          }
       break;
     }
   } while(key.ScanCode != SCAN_ESC);

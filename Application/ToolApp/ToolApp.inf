@@ -11,7 +11,7 @@
   COMFunction.c
   CMOS.c
   Variable.c
-  # VariableDetail.c
+  VariableDetail.c
   About.c
 
 [Packages]
