@@ -43,9 +43,7 @@ VOID *mGetVariable (
 }
 
 
-UINTN ScanVariable(
-  IN OUT VARIABLE_INFO *VariableList
-) 
+UINTN ScanVariable() 
 {
   UINTN           Num;
   UINTN           NameSize;
@@ -122,7 +120,7 @@ VOID ShowVariableListTitle (
 {
   SetColor(EFI_BACKGROUND_MAGENTA|EFI_LIGHTGRAY);
   gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
-  Print(L"Variable Name                       Size    GUID                         [%02d/%02d]", CurrPage, TotalPage);
+  Print(L"Variable Name                          Size GUID                         [%02d/%02d]", CurrPage, TotalPage);
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   SetColor(EFI_LIGHTGRAY);
   BLOCK_BOUNDARY;
@@ -133,17 +131,19 @@ VOID Variable()
   EFI_INPUT_KEY   key;
   UINTN           Index;
   UINTN           EventIndex;
-  UINTN           VariableNum;
+  UINTN           VariableNum = 0;
   UINTN           PageNum;
   UINTN           CurrVariable;
   UINTN           CurrPage;
   UINTN           PreVariable;
   BOOLEAN         ChangePageMode = FALSE;
-  VARIABLE_INFO   VariableList[MAX_VARIABLE_NUM];
+  
   
   ZeroMem(VariableList, MAX_VARIABLE_NUM * sizeof(VARIABLE_INFO));
   gST->ConOut->ClearScreen(gST->ConOut);
-  VariableNum = ScanVariable(VariableList);
+  VariableNum = ScanVariable();
+
+  // Print(L"Test=%d\n", VariableNum);
   CurrVariable = 0;
   // Variable List
   CurrPage = 1;
@@ -201,15 +201,15 @@ VOID Variable()
       break;
       case SCAN_NULL:
           // Enter Function
-          if(key.UnicodeChar == 0x0D) { 
-            VariableDetail(VariableList[CurrVariable]);
-            gST->ConOut->ClearScreen(gST->ConOut);
-            ShowVariableListTitle(CurrPage, PageNum);
-            for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
-              (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
-              ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
-            }
-          }
+          // if(key.UnicodeChar == 0x0D) { 
+          //   VariableDetail(VariableList[CurrVariable]);
+          //   gST->ConOut->ClearScreen(gST->ConOut);
+          //   ShowVariableListTitle(CurrPage, PageNum);
+          //   for(Index = 0; Index < 20 && 20 * (CurrPage - 1) + Index < VariableNum; Index++) {
+          //     (CurrVariable % 20) == Index ? SetColor(EFI_WHITE) : SetColor(EFI_LIGHTGRAY); 
+          //     ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
+          //   }
+          // }
       break;
     }
   } while(key.ScanCode != SCAN_ESC);

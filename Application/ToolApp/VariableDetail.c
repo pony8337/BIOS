@@ -1,7 +1,7 @@
 #include "ToolApp.h"
 
 VOID VariableDetail (
-    IN  VARIABLE_INFO VariableInfo
+    // IN  VARIABLE_INFO VariableInfo
 )
 {
   EFI_INPUT_KEY key;

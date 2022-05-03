@@ -25,10 +25,10 @@
 //
 // Variable
 //
-#define MAX_VARIABLE_NUM            100
+#define MAX_VARIABLE_NUM            1000
 #define VARIABLE_LIST_Y             2
 #define VARIABLE_LIST_NAME_X        0
-#define VARIABLE_LIST_SIZE_X        36
+#define VARIABLE_LIST_SIZE_X        39
 #define VARIABLE_LIST_GUID_X        44
 
 typedef struct {    
@@ -37,6 +37,8 @@ typedef struct {
     CHAR16     Attributes[20];
     EFI_GUID   VendorGuid;
 } VARIABLE_INFO;
+
+VARIABLE_INFO   VariableList[MAX_VARIABLE_NUM];
 
 /*
   @param  Name  	      Variable name
@@ -58,9 +60,7 @@ VOID
   @param  VariableInfo  Variable information
 */
 VOID
-VariableDetail (
-  IN  VARIABLE_INFO VariableInfo
-);
+VariableDetail ();
 
 
 //
