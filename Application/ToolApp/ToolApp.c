@@ -7,7 +7,7 @@ VOID SMBus(){return;}
 VOID EDID(){return;}
 VOID SMBios(){return;}
 VOID USBView(){return;}
-// VOID Variable(){return;}
+VOID Variable(){return;}
 
 VOID tool()
 {
