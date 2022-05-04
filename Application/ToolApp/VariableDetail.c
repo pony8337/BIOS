@@ -20,12 +20,12 @@ VOID VariableDetail (
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
   // Block A
-  SetColor(EFI_LIGHTGRAY);
+  SetColor(SHOW_DATA_COLOR);
   gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
   Print(L"[ ");
-  SetColor(EFI_LIGHTGREEN); 
+  SetColor(BLOCKD_TITLE_COLOR); 
   Print(L"%s", VariableInfo.VariableName);
-  SetColor(EFI_LIGHTGRAY);
+  SetColor(SHOW_DATA_COLOR);
   Print(L" ]");
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   Print(L"GUID: ");

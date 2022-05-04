@@ -4,7 +4,7 @@ VOID IOSpace(){return;}
 VOID PCI(){return;}
 VOID Memory(){return;}
 VOID SMBus(){return;}
-VOID EDID(){return;}
+// VOID EDID(){return;}
 VOID SMBios(){return;}
 VOID USBView(){return;}
 

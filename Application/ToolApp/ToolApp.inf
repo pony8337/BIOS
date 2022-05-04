@@ -10,13 +10,17 @@
   ToolApp.c
   COMFunction.c
   CMOS.c
+  EDID.c
   Variable.c
-  VariableDetail.c
+  VariableDetail.c  
   About.c
 
 [Packages]
   MdePkg/MdePkg.dec
   ShellPkg/ShellPkg.dec
+
+[Protocols] 
+  gEfiEdidDiscoveredProtocolGuid
 
 [LibraryClasses]
   UefiLib

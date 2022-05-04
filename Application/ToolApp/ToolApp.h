@@ -9,6 +9,7 @@
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
+#include <Protocol/EdidDiscovered.h>
 
 //
 // CMOS
@@ -21,6 +22,12 @@
 #define RTC_DATE                    0x07
 #define RTC_MONTH                   0x08
 #define RTC_YEAR                    0x09
+
+//
+// EDID
+//
+
+
 
 //
 // Variable
@@ -71,6 +78,7 @@ VariableDetail (
 extern EFI_SYSTEM_TABLE             *gST;
 extern EFI_BOOT_SERVICES            *gBS;
 extern EFI_RUNTIME_SERVICES         *gRT;
+extern EFI_HANDLE                   gImageHandle;
        
 #define SHOW_CHOOSE_DATA            EFI_LIGHTGREEN
 #define SHOW_DATA_COLOR             EFI_WHITE 
@@ -82,6 +90,7 @@ extern EFI_RUNTIME_SERVICES         *gRT;
 #define SetColor(color)             gST->ConOut->SetAttribute(gST->ConOut, color)
 #define gotoXY(x, y)                gST->ConOut->SetCursorPosition(gST->ConOut, x, y)
 #define BLOCK_BOUNDARY              Print(L"********************************************************************************")
+// #define TITLE_BOUNDARY              Print(L"--------------------------------------------------------------------------------")
 
 /*
      --------------------------------
@@ -114,6 +123,7 @@ extern EFI_RUNTIME_SERVICES         *gRT;
 
 
 // Block C
+#define BLOCKC_INDEX_COLOR          EFI_BROWN
 #define BlockC_RowX(offset)         3 * offset + 3
 #define BlockC_RowY(offset)         3
 #define BlockC_ColumnX(offset)      0
