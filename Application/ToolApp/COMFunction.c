@@ -87,12 +87,14 @@ UpdateArrayData (
 	return ;
 }
 
-VOID 
-CleanBlockD (
-  IN  DISPLAY_MODE  DisplayMode
+/*
+  @param  DisplayMode	  Block D show information.
+*/
+VOID
+ShowBlockDTitle (
+  IN	  DISPLAY_MODE  DisplayMode
 )
 {
-  UINTN x;
   DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
   gotoXY(BlockD_Info_X, BlockD_Info_Y);
   Print(L"  Text ");
@@ -102,6 +104,18 @@ CleanBlockD (
   DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
   gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
   Print(L" Information ");
+}
+
+/*
+  @param  DisplayMode	  Block D show information.
+*/
+VOID 
+CleanBlockD (
+  IN  DISPLAY_MODE  DisplayMode
+)
+{
+  UINTN x;
+  ShowBlockDTitle(DisplayMode);
   for(x = 1; x <= 17; x++) {
     gotoXY(BlockD_Info_X, BlockD_Info_Y + x); 
     CLEAN_BLOCK_D;
@@ -122,3 +136,5 @@ ShowASCII (
   gotoXY(offset % 16 + BlockD_Info_X + 3 , BlockC_OffsetY(offset)); 
   IsDigital(data) ? Print(L"%c", data) : Print(L".");
 }
+
+

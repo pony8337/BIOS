@@ -43,35 +43,35 @@ VOID tool()
       {
         case SCAN_DOWN:    
         case SCAN_RIGHT:   
-            SetColor(SHOW_DATA_COLOR);
-            gotoXY(x, CurrPost);
-            Print(L"%s\n", TMenu[CurrPost].FunName);
-            CurrPost = (CurrPost + TotalNum + 1) % TotalNum;
-            SetColor(SHOW_CHOOSE_DATA);
-            gotoXY(x, CurrPost);
-            Print(L"%s\n", TMenu[CurrPost].FunName);
-        break;
+          SetColor(SHOW_DATA_COLOR);
+          gotoXY(x, CurrPost);
+          Print(L"%s\n", TMenu[CurrPost].FunName);
+          CurrPost = (CurrPost + TotalNum + 1) % TotalNum;
+          SetColor(SHOW_CHOOSE_DATA);
+          gotoXY(x, CurrPost);
+          Print(L"%s\n", TMenu[CurrPost].FunName);
+          break;
         case SCAN_UP:
         case SCAN_LEFT:
-            SetColor(SHOW_DATA_COLOR);
-            gotoXY(x, CurrPost);
-            Print(L"%s\n", TMenu[CurrPost].FunName);
-            CurrPost = (CurrPost + TotalNum - 1) % TotalNum;
-            SetColor(SHOW_CHOOSE_DATA);
-            gotoXY(x, CurrPost);
-            Print(L"%s\n", TMenu[CurrPost].FunName);
-        break;
+          SetColor(SHOW_DATA_COLOR);
+          gotoXY(x, CurrPost);
+          Print(L"%s\n", TMenu[CurrPost].FunName);
+          CurrPost = (CurrPost + TotalNum - 1) % TotalNum;
+          SetColor(SHOW_CHOOSE_DATA);
+          gotoXY(x, CurrPost);
+          Print(L"%s\n", TMenu[CurrPost].FunName);
+          break;
         case SCAN_NULL:
-            if(key.UnicodeChar == 0x0D) { // Enter Function
-                TMenu[CurrPost].FuncPtr();
-                gST->ConOut->ClearScreen(gST->ConOut); 
-                for(y = 0; y < TotalNum; y++){
-                    y == CurrPost ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR);
-                    gotoXY(x, y);
-                    Print(L"%s\n", TMenu[y].FunName);
-                }
-            }
-        break;
+          if(key.UnicodeChar == 0x0D) { // Enter Function
+              TMenu[CurrPost].FuncPtr();
+              gST->ConOut->ClearScreen(gST->ConOut); 
+              for(y = 0; y < TotalNum; y++){
+                  y == CurrPost ? SetColor(SHOW_CHOOSE_DATA) : SetColor(SHOW_DATA_COLOR);
+                  gotoXY(x, y);
+                  Print(L"%s\n", TMenu[y].FunName);
+              }
+          }
+          break;
       }
   } while(key.ScanCode != SCAN_ESC);
           

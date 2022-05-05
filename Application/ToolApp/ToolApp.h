@@ -79,7 +79,9 @@ extern EFI_SYSTEM_TABLE             *gST;
 extern EFI_BOOT_SERVICES            *gBS;
 extern EFI_RUNTIME_SERVICES         *gRT;
 extern EFI_HANDLE                   gImageHandle;
-       
+
+#define STALL_ONE_SECOND             1000000
+
 #define SHOW_CHOOSE_DATA            EFI_LIGHTGREEN
 #define SHOW_DATA_COLOR             EFI_WHITE 
 #define NO_DATA_COLOR               EFI_LIGHTGRAY     
@@ -197,6 +199,15 @@ UpdateArrayData (
   IN  	 UINTN  DataSize,
   IN 	   UINTN  CurrPage,
   IN OUT UINT8  *DataArray
+);
+
+
+/*
+  @param  DisplayMode   Block D show information.
+*/
+VOID
+ShowBlockDTitle (
+  IN    DISPLAY_MODE  DisplayMode
 );
 
 /*

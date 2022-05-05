@@ -105,15 +105,7 @@ VOID CMOS() {
     if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, CMOSData[Index]);
   }
   // Block D
-  DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X, BlockD_Info_Y);
-  Print(L"  Text ");
-  SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
-  Print(L"/");
-  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
-  Print(L" Information ");
+  ShowBlockDTitle(DisplayMode);
   //Update CMOS Data
   updateCMOSData(CMOSData, (UINT8)offset, DisplayMode);
 
@@ -133,19 +125,19 @@ VOID CMOS() {
       case SCAN_UP:
         InputMode = FALSE;
         offset = MoveCursor(offset, (offset + 256 - 16) % 256, CMOSData, DisplayMode);
-      break;
+        break;
       case SCAN_DOWN:
         InputMode = FALSE;
         offset = MoveCursor(offset, (offset + 256 + 16) % 256, CMOSData, DisplayMode);
-      break;
+        break;
       case SCAN_LEFT:
         InputMode = FALSE;
         offset = MoveCursor(offset, (offset + 256 - 1) % 256, CMOSData, DisplayMode);
-      break;
+        break;
       case SCAN_RIGHT:
         InputMode = FALSE;
         offset = MoveCursor(offset, (offset + 256 + 1) % 256, CMOSData, DisplayMode);
-      break;
+        break;
       case SCAN_NULL:
         if(key.UnicodeChar == CHAR_BACKSPACE && InputMode) {
           InputData >>= 4;
@@ -184,7 +176,7 @@ VOID CMOS() {
             Print(L"%02x : %02x : %02x", CMOSData[RTC_HOURS], CMOSData[RTC_MINUTES], CMOSData[RTC_SECONDs]);
           }
         }
-      break;
+        break;
     }
   } while(key.ScanCode!=SCAN_ESC);  
   return ;

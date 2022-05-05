@@ -72,15 +72,7 @@ VOID VariableDetail (
     if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, VariableData[Index]);
   }
   // Block D
-  DisplayMode == DISPLAY_ASCII ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X, BlockD_Info_Y);
-  Print(L"  Text ");
-  SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
-  Print(L"/");
-  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
-  gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
-  Print(L" Information ");
+  ShowBlockDTitle(DisplayMode);
   
 
   // key event
@@ -115,8 +107,7 @@ VOID VariableDetail (
           gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
           Print(L"%02x ", VariableData[Index]);
         }
-
-      break;
+        break;
       case SCAN_PAGE_DOWN:
         DEBUG ((EFI_D_INFO, "\nSCAN_PAGE_DOWN\n"));
         if(PageNum == 1) break;
@@ -130,9 +121,8 @@ VOID VariableDetail (
           Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
           gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
           Print(L"%02x ", VariableData[Index]);
-        }
-        
-      break;
+        }        
+        break;
       case SCAN_NULL:
         // TAB
         if(key.UnicodeChar == EFI_KEY_TAB) { 

@@ -176,7 +176,7 @@ VOID Variable()
           SetColor(SHOW_CHOOSE_DATA);
           ShowVariable(VariableList[CurrVariable], CurrVariable % 20);
         }
-      break;
+        break;
       case SCAN_UP:
       case SCAN_LEFT:
         PreVariable = CurrVariable;
@@ -196,7 +196,7 @@ VOID Variable()
           SetColor(SHOW_CHOOSE_DATA);
           ShowVariable(VariableList[CurrVariable], CurrVariable % 20);
         }       
-      break;
+        break;
       case SCAN_NULL:
           // Enter Function
           if(key.UnicodeChar == 0x0D) { 
@@ -208,7 +208,7 @@ VOID Variable()
               ShowVariable(VariableList[20 * (CurrPage - 1) + Index], Index);
             }
           }
-      break;
+        break;
     }
   } while(key.ScanCode != SCAN_ESC);
   
