@@ -16,7 +16,7 @@ VOID updateCMOSData (
       x == offset ? SetColor(SHOW_CHOOSE_DATA) : (DataArray[x] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
       gotoXY(BlockC_OffsetX(x), BlockC_OffsetY(x));
       Print(L"%02x ", DataArray[x]);
-      if(DisplayMode == DISPLAY_INFOR) {
+      if(DisplayMode == DISPLAY_INFO) {
         switch(x) {
           case RTC_YEAR:
             SetColor(SHOW_DATA_COLOR);
@@ -154,7 +154,7 @@ VOID CMOS() {
           InputData = ChangeInputData(InputData, key.UnicodeChar, offset);
         } else if(key.UnicodeChar == EFI_KEY_TAB) {
           // display mode
-          if(DisplayMode == DISPLAY_INFOR) {
+          if(DisplayMode == DISPLAY_INFO) {
             DisplayMode = DISPLAY_ASCII;            
             CleanBlockD(DisplayMode);
             for(Index = 0; Index <= 0xFF; Index++) {
@@ -162,7 +162,7 @@ VOID CMOS() {
               ShowASCII(Index, CMOSData[Index]);
             }
           } else if(DisplayMode == DISPLAY_ASCII) {
-            DisplayMode = DISPLAY_INFOR;
+            DisplayMode = DISPLAY_INFO;
             CleanBlockD(DisplayMode);
             gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
             SetColor(BLOCKD_TITLE_COLOR);

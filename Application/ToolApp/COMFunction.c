@@ -101,7 +101,7 @@ ShowBlockDTitle (
   SetColor(EFI_BROWN);
   gotoXY(BlockD_Info_X + 7, BlockD_Info_Y);
   Print(L"/");
-  DisplayMode == DISPLAY_INFOR ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
+  DisplayMode == DISPLAY_INFO ? SetColor(EFI_YELLOW) : SetColor(EFI_BROWN);
   gotoXY(BlockD_Info_X + 8, BlockD_Info_Y);
   Print(L" Information ");
 }

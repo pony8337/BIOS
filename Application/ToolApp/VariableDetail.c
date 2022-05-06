@@ -127,7 +127,7 @@ VOID VariableDetail (
         // TAB
         if(key.UnicodeChar == EFI_KEY_TAB) { 
            // display mode
-          if(DisplayMode == DISPLAY_INFOR) {
+          if(DisplayMode == DISPLAY_INFO) {
             DisplayMode = DISPLAY_ASCII;            
             CleanBlockD(DisplayMode);
             for(Index = 0; Index <= 0xFF; Index++) {
@@ -135,7 +135,7 @@ VOID VariableDetail (
               ShowASCII(Index, VariableData[Index]);
             }
           } else if(DisplayMode == DISPLAY_ASCII) {
-            DisplayMode = DISPLAY_INFOR;
+            DisplayMode = DISPLAY_INFO;
             CleanBlockD(DisplayMode);
             gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
             SetColor(BLOCKD_TITLE_COLOR);

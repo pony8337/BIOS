@@ -28,7 +28,6 @@
 //
 
 
-
 //
 // Variable
 //
@@ -153,7 +152,7 @@ typedef struct {
 } Tool_Menu;
 
 typedef enum {
-    DISPLAY_INFOR,
+    DISPLAY_INFO,
     DISPLAY_ASCII
 } DISPLAY_MODE;
 
