@@ -75,7 +75,7 @@ VOID
 UpdateArrayData (
   IN  	 UINT8  *SourceData,
   IN  	 UINTN  DataSize,
-  IN 	 UINTN  CurrPage,
+  IN  	 UINTN  CurrPage,
   IN OUT UINT8  *DataArray
   )
 {

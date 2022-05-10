@@ -8,7 +8,9 @@ VOID EdidBlockAInfob (
     gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
     Print(L"# EDID #");
     gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
-    Print(L"SizeOfEdid: 0x%2x", EdidSize);
+    Print(L"SizeOfEdid:    ");
+    gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+    Print(L"SizeOfEdid: %3d", EdidSize);
     gotoXY(BlockA_Boundary_X, BlockA_Boundary_Y);
     BLOCK_BOUNDARY;    
 }
@@ -53,43 +55,56 @@ VOID EdidBlockCInfo (
     
 
 VOID EdidBlockDInfo (
-    IN  UINT8   *EdidData
-)
+    IN  UINT8           *EdidData,
+    IN  DISPLAY_MODE    DisplayMode,
+    IN  UINTN           offset
+    )
 {
-    UINT16                          ManufacturerName;
-    UINT8                           ManufacturerName1;
-    UINT8                           ManufacturerName2;
-    UINT8                           ManufacturerName3;
-    UINT16                          ResolutionX;
-    UINT16                          ResolutionY;
-  // Get detail information.
-    ManufacturerName = (UINT16)(EdidData[8] << 8 | EdidData[9]);
-    ManufacturerName1 = ((ManufacturerName >> 10) & 0x1F) + 64;
-    ManufacturerName2 = ((ManufacturerName >> 5) & 0x1F) + 64;
-    ManufacturerName3 = (ManufacturerName & 0x1F) + 64;
-    ResolutionX = ((UINT16)(EdidData[0x3A] >> 4) << 8) | (UINT16)EdidData[0x38];
-    ResolutionY = ((UINT16)(EdidData[0x3D] >> 4) << 8) | (UINT16)EdidData[0x3B];
+    UINT16  ManufacturerName;
+    UINT8   ManufacturerName1;
+    UINT8   ManufacturerName2;
+    UINT8   ManufacturerName3;
+    UINT16  ResolutionX;
+    UINT16  ResolutionY;
+    UINTN   Index;
 
-    SetColor(BLOCKD_TITLE_COLOR);
-    gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
-    Print(L"Manufacturer Name: ");    
-    SetColor(SHOW_DATA_COLOR);
-    Print(L"%c%c%c", ManufacturerName1, ManufacturerName2, ManufacturerName3);
-    SetColor(BLOCKD_TITLE_COLOR);
-    gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
-    Print(L"Manufacturer ID: ");    
-    SetColor(SHOW_DATA_COLOR);
-    Print(L"0x%04x", ManufacturerName);
-    SetColor(BLOCKD_TITLE_COLOR);
-    gotoXY(BlockD_Info_X, BlockD_Info_Y + 3);
-    Print(L"Product Code: ");    
-    SetColor(SHOW_DATA_COLOR);
-    Print(L"0x%02x%02x", EdidData[11], EdidData[10]);
-    SetColor(BLOCKD_TITLE_COLOR);
-    gotoXY(BlockD_Info_X, BlockD_Info_Y + 4);
-    Print(L"Resolution: ");    
-    SetColor(SHOW_DATA_COLOR);
-    Print(L"%4d * %4d", ResolutionX, ResolutionY);
+    if(DisplayMode == DISPLAY_INFO) {
+        // Get detail information.
+        ManufacturerName = (UINT16)(EdidData[8] << 8 | EdidData[9]);
+        ManufacturerName1 = ((ManufacturerName >> 10) & 0x1F) + 64;
+        ManufacturerName2 = ((ManufacturerName >> 5) & 0x1F) + 64;
+        ManufacturerName3 = (ManufacturerName & 0x1F) + 64;
+        ResolutionX = ((UINT16)(EdidData[0x3A] >> 4) << 8) | (UINT16)EdidData[0x38];
+        ResolutionY = ((UINT16)(EdidData[0x3D] >> 4) << 8) | (UINT16)EdidData[0x3B];
+
+        SetColor(BLOCKD_TITLE_COLOR);
+        gotoXY(BlockD_Info_X, BlockD_Info_Y + 1);
+        Print(L"Manufacturer Name: ");    
+        SetColor(SHOW_DATA_COLOR);
+        Print(L"%c%c%c", ManufacturerName1, ManufacturerName2, ManufacturerName3);
+        SetColor(BLOCKD_TITLE_COLOR);
+        gotoXY(BlockD_Info_X, BlockD_Info_Y + 2);
+        Print(L"Manufacturer ID: ");    
+        SetColor(SHOW_DATA_COLOR);
+        Print(L"0x%04x", ManufacturerName);
+        SetColor(BLOCKD_TITLE_COLOR);
+        gotoXY(BlockD_Info_X, BlockD_Info_Y + 3);
+        Print(L"Product Code: ");    
+        SetColor(SHOW_DATA_COLOR);
+        Print(L"0x%02x%02x", EdidData[11], EdidData[10]);
+        SetColor(BLOCKD_TITLE_COLOR);
+        gotoXY(BlockD_Info_X, BlockD_Info_Y + 4);
+        Print(L"Resolution: ");    
+        SetColor(SHOW_DATA_COLOR);
+        Print(L"%4d * %4d", ResolutionX, ResolutionY);
+
+    } else if(DisplayMode == DISPLAY_ASCII) {
+        
+        for(Index = 0; Index <= 0xFF; Index++) {
+            offset == Index ? SetColor(SHOW_CHOOSE_DATA) : (EdidData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
+            ShowASCII(Index, EdidData[Index]);
+        }
+    }
 
 }
 
@@ -141,9 +156,9 @@ VOID EDID()
     // Block C    
     EdidBlockCInfo (offset, EdidInfo, EdidData, DisplayMode);    
     // Block D
-    ShowBlockDTitle(DisplayMode);
-    
-    EdidBlockDInfo(EdidData);
+    ShowBlockDTitle(DisplayMode);    
+    EdidBlockDInfo(EdidData, DisplayMode, offset);
+
     do {
         gBS->WaitForEvent (1, &gST->ConIn->WaitForKey, &Index);
         gST->ConIn->ReadKeyStroke(gST->ConIn, &key);
@@ -162,11 +177,85 @@ VOID EDID()
                 break;
             case SCAN_PAGE_UP:
                 // DEBUG ((EFI_D_INFO, "\nSCAN_PAGE_UP\n"));
-                if(EdidHandleNum == 1) break;                
+                if(EdidHandleNum == 1) break;
+                Status = gBS->CloseProtocol(
+                           EdidHandleBuffer[CurrentEdid],
+                           &gEfiEdidDiscoveredProtocolGuid,
+                           gImageHandle,
+                           NULL
+                        );
+                if(Status != EFI_SUCCESS) {
+                    gST->ConOut->ClearScreen(gST->ConOut);
+                    Print(L"EDID Error 1 - %r", Status);
+                    gBS->Stall(STALL_ONE_SECOND);
+                    return;
+                }           
+                CurrentEdid = (CurrentEdid == 0) ? EdidHandleNum - 1 : CurrentEdid - 1;
+                Status = gBS->OpenProtocol(
+                            EdidHandleBuffer[CurrentEdid],
+                            &gEfiEdidDiscoveredProtocolGuid,
+                            &EdidInfo,
+                            gImageHandle,
+                            NULL,
+                            EFI_OPEN_PROTOCOL_GET_PROTOCOL                        
+                        );
+                if(Status != EFI_SUCCESS) {
+                    gST->ConOut->ClearScreen(gST->ConOut);
+                    Print(L"EDID Error 2 - %r", Status);
+                    gBS->Stall(STALL_ONE_SECOND);
+                    return;
+                }
+                // gST->ConOut->ClearScreen(gST->ConOut);
+                // Block A
+                EdidBlockAInfob(EdidInfo->SizeOfEdid);
+                // Block B
+                EdidBlockBInfo (CurrentEdid, EdidHandleNum);
+                // Block C    
+                EdidBlockCInfo (offset, EdidInfo, EdidData, DisplayMode);    
+                // Block D
+                ShowBlockDTitle(DisplayMode);    
+                EdidBlockDInfo(EdidData, DisplayMode, offset);
                 break;
             case SCAN_PAGE_DOWN:
                 // DEBUG ((EFI_D_INFO, "\nSCAN_PAGE_DOWN\n"));
-                if(EdidHandleNum == 1) break;                
+                if(EdidHandleNum == 1) break;
+                Status = gBS->CloseProtocol(
+                    EdidHandleBuffer[CurrentEdid],
+                    &gEfiEdidDiscoveredProtocolGuid,
+                    gImageHandle,
+                    NULL
+                );
+                if(Status != EFI_SUCCESS) {
+                    gST->ConOut->ClearScreen(gST->ConOut);
+                    Print(L"EDID Error 3 - %r", Status);
+                    gBS->Stall(STALL_ONE_SECOND);
+                    break;
+                }   
+                CurrentEdid = (CurrentEdid == EdidHandleNum - 1) ? 0 : CurrentEdid + 1;
+                Status = gBS->OpenProtocol(
+                            EdidHandleBuffer[CurrentEdid],
+                            &gEfiEdidDiscoveredProtocolGuid,
+                            &EdidInfo,
+                            gImageHandle,
+                            NULL,
+                            EFI_OPEN_PROTOCOL_GET_PROTOCOL                        
+                        );
+                if(Status != EFI_SUCCESS) {
+                    gST->ConOut->ClearScreen(gST->ConOut);
+                    Print(L"EDID Error 4 - %r", Status);
+                    gBS->Stall(STALL_ONE_SECOND);
+                    return;
+                }
+                // gST->ConOut->ClearScreen(gST->ConOut);
+                // Block A
+                EdidBlockAInfob(EdidInfo->SizeOfEdid);
+                // Block B
+                EdidBlockBInfo (CurrentEdid, EdidHandleNum);
+                // Block C    
+                EdidBlockCInfo (offset, EdidInfo, EdidData, DisplayMode);    
+                // Block D
+                ShowBlockDTitle(DisplayMode);    
+                EdidBlockDInfo(EdidData, DisplayMode, offset);       
                 break;
             case SCAN_NULL:
                 // TAB
@@ -174,15 +263,12 @@ VOID EDID()
                     // display mode
                     if(DisplayMode == DISPLAY_INFO) {
                         DisplayMode = DISPLAY_ASCII;            
-                        CleanBlockD(DisplayMode);
-                        for(Index = 0; Index <= 0xFF; Index++) {
-                            Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (EdidData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
-                            ShowASCII(Index, EdidData[Index]);
-                        }
+                        CleanBlockD(DisplayMode);                        
+                        EdidBlockDInfo(EdidData, DisplayMode, offset);      
                     } else if(DisplayMode == DISPLAY_ASCII) {
                         DisplayMode = DISPLAY_INFO;
                         CleanBlockD(DisplayMode);
-                        EdidBlockDInfo(EdidData);
+                        EdidBlockDInfo(EdidData, DisplayMode, offset);
                     }
                 }
                 break;

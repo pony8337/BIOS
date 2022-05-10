@@ -106,6 +106,8 @@ VOID VariableDetail (
           Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
           gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
           Print(L"%02x ", VariableData[Index]);
+          // Block D information
+          if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, VariableData[Index]);
         }
         break;
       case SCAN_PAGE_DOWN:
@@ -121,6 +123,8 @@ VOID VariableDetail (
           Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
           gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));
           Print(L"%02x ", VariableData[Index]);
+          // Block D information
+          if(DisplayMode == DISPLAY_ASCII) ShowASCII(Index, VariableData[Index]);
         }        
         break;
       case SCAN_NULL:
