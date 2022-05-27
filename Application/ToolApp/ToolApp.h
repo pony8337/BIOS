@@ -9,7 +9,6 @@
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
-#include <Protocol/EdidDiscovered.h>
 
 //
 // CMOS
@@ -26,7 +25,29 @@
 //
 // EDID
 //
+#include <Protocol/EdidDiscovered.h>
 
+//
+// USB View
+//
+#include <Protocol/UsbIo.h>
+#include <Protocol/DevicePath.h>
+#include <Protocol/DevicePathToText.h>
+
+#define EN_US                       0x409
+#define USB_MAX_NUM                 0xFF
+typedef struct {
+    UINT16  VendorId;
+    UINT16  ProductId;
+    UINT8   DeviceClass;
+    UINT8   DeviceSubClass;
+    CHAR16  *Manufacturer;
+    CHAR16  *Product;
+    CHAR16  *SerialNum;
+    CHAR16  *DevicePath;  
+} USB_DEVICE_INFO;
+
+USB_DEVICE_INFO UsbDeviceList[USB_MAX_NUM];
 
 //
 // Variable
@@ -79,7 +100,7 @@ extern EFI_BOOT_SERVICES            *gBS;
 extern EFI_RUNTIME_SERVICES         *gRT;
 extern EFI_HANDLE                   gImageHandle;
 
-#define STALL_ONE_SECOND             1000000
+#define STALL_ONE_SECOND            1000000
 
 #define SHOW_CHOOSE_DATA            EFI_LIGHTGREEN
 #define SHOW_DATA_COLOR             EFI_WHITE 

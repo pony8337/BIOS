@@ -20,7 +20,7 @@ VOID About()
 	gotoXY(5, 10);
 	Print(L"=                 Version: 0.1                  =");
 	gotoXY(5, 11);
-	Print(L"=                    2022.03                    =");
+	Print(L"=                  2  0  2  2                   =");
 	gotoXY(5, 12);
 	Print(L"=================================================");
 	do {
