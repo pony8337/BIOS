@@ -89,14 +89,7 @@ VOID CMOS() {
   gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
   Print(L"Page:1/1");
   // Block C
-  SetColor(EFI_BROWN);
-  for(Index = 0; Index <= 0xF; Index++){
-    gotoXY(BlockC_RowX(Index), BlockC_RowY(Index));
-    Print(L"%02x", Index);
-    gotoXY(BlockC_ColumnX(Index), BlockC_ColumnY(Index));
-    Print(L"%01x0", Index);
-  }
-  
+  ShowBlocCIndex();  
   for(Index = 0; Index <= 0xFF; Index++) {
     Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (CMOSData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
     gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));

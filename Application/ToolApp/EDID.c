@@ -35,14 +35,7 @@ VOID EdidBlockCInfo (
 )
 {
     UINTN   Index;
-    SetColor(BLOCKC_INDEX_COLOR);
-    for(Index = 0; Index <= 0xF; Index++){
-        gotoXY(BlockC_RowX(Index), BlockC_RowY(Index));
-        Print(L"%02x", Index);
-        gotoXY(BlockC_ColumnX(Index), BlockC_ColumnY(Index));
-        Print(L"%01x0", Index);
-    }   
-
+    ShowBlocCIndex();
     for(Index = 0; Index <= 0xFF; Index++) {
         EdidData[Index] = (Index < EdidInfo->SizeOfEdid) ? *(EdidInfo->Edid + Index) : 0xFF;
         Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (EdidData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));

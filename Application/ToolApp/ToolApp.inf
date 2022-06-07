@@ -12,6 +12,7 @@
   CMOS.c
   EDID.c
   USBView.c
+  MMIO.c
   Variable.c
   VariableDetail.c  
   About.c
@@ -33,4 +34,3 @@
   MemoryAllocationLib
   BaseLib
   DebugLib
-

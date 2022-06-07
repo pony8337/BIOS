@@ -139,7 +139,7 @@ VOID USBView()
     if(UsbNum == 0){
         SetColor(SHOW_DATA_COLOR);
         gotoXY(BlockC_ColumnX(0), BlockC_ColumnY(0));
-        Print(L"No Usb Device~");
+        Print(L"No Usb Device!");
     } else {
         ShowUsbDevice(UsbNum, CurUsb);
     }
@@ -161,7 +161,7 @@ VOID USBView()
                 if(UsbNum == 0){
                     SetColor(SHOW_DATA_COLOR);
                     gotoXY(BlockC_ColumnX(0), BlockC_ColumnY(0));
-                    Print(L"No Usb Device~");
+                    Print(L"No Usb Device!");
                 } else {
                     CurUsb = CurUsb + 1 == UsbNum ? 0 : CurUsb + 1;
                     ShowUsbDevice(UsbNum, CurUsb);
@@ -179,7 +179,7 @@ VOID USBView()
                 if(UsbNum == 0){
                     SetColor(SHOW_DATA_COLOR);
                     gotoXY(BlockC_ColumnX(0), BlockC_ColumnY(0));
-                    Print(L"No Usb Device~");
+                    Print(L"No Usb Device!");
                 } else {
                     ShowUsbDevice(UsbNum, CurUsb);
                 }

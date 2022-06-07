@@ -45,19 +45,19 @@ ChangeInputData (
 {
 	if (InputData >= '0' && InputData <= '9') {
 		Data = (Data << 4) | (UINT8)(InputData - '0');
-		SetColor(EFI_WHITE);
+		SetColor(INPUT_DATA_COLOR);
 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
 	} else if (InputData >= 'a' && InputData <= 'f') {
 		Data = (Data << 4) | (UINT8)(InputData - 'a' + 10);
-		SetColor(EFI_WHITE);
+		SetColor(INPUT_DATA_COLOR);
 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
 	} else if (InputData >= 'A' && InputData <= 'F') {
 		Data = (Data << 4) | (UINT8)(InputData - 'A' + 10);
-		SetColor(EFI_WHITE);
+		SetColor(INPUT_DATA_COLOR);
 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
 		Print(L"%02x ", Data);
 		return Data;
@@ -86,6 +86,20 @@ UpdateArrayData (
     	DataArray[Index] = (StartData + Index) < DataSize ? SourceData[StartData + Index] : 0xFF;
 	return ;
 }
+
+VOID
+ShowBlocCIndex ()
+{
+  UINTN Index;
+  SetColor(EFI_BROWN);
+  for(Index = 0; Index <= 0xF; Index++){
+    gotoXY(BlockC_RowX(Index), BlockC_RowY(Index));
+    Print(L"%02x", Index);
+    gotoXY(BlockC_ColumnX(Index), BlockC_ColumnY(Index));
+    Print(L"%01x0", Index);
+  }
+}
+
 
 /*
   @param  DisplayMode	  Block D show information.

@@ -10,6 +10,7 @@
 #include <Library/DebugLib.h>
 #include <Library/MemoryAllocationLib.h>
 
+
 //
 // CMOS
 // 
@@ -67,6 +68,11 @@ typedef struct {
 
 VARIABLE_INFO   VariableList[MAX_VARIABLE_NUM];
 
+//
+// IOSpace
+//
+
+
 /*
   @param  Name  	      Variable name
   @param  VendorGuid    Variable Guid pointer
@@ -104,7 +110,9 @@ extern EFI_HANDLE                   gImageHandle;
 
 #define SHOW_CHOOSE_DATA            EFI_LIGHTGREEN
 #define SHOW_DATA_COLOR             EFI_WHITE 
-#define NO_DATA_COLOR               EFI_LIGHTGRAY     
+#define INPUT_DATA_COLOR            EFI_LIGHTRED
+#define NO_DATA_COLOR               EFI_LIGHTGRAY
+#define TITLE_COLOR                 EFI_LIGHTGRAY
 
 #define EFI_KEY_TAB                 0x09
 #define CLEAN_DATA                  Print(L"                                                                                ")
@@ -221,7 +229,6 @@ UpdateArrayData (
   IN OUT UINT8  *DataArray
 );
 
-
 /*
   @param  DisplayMode   Block D show information.
 */
@@ -248,11 +255,14 @@ ShowASCII (
   IN    UINT8 data
 );
 
+VOID
+ShowBlocCIndex ();
+
 // Tool Function
 VOID CMOS();
 VOID IOSpace();
 VOID PCI();
-VOID Memory();
+VOID MMIO();
 VOID SMBus();
 VOID EDID();
 VOID SMBios();
@@ -265,7 +275,7 @@ Tool_Menu TMenu[] = {
   {0x00,     CMOS,        L"CMOS"},
   {0x01,  IOSpace,     L"IOSpace"},
   {0x02,      PCI,         L"PCI"},
-  {0x03,   Memory,      L"Memory"},
+  {0x03,     MMIO,      L"Memory"},
   {0x04,    SMBus,       L"SMBus"},
   {0x05,     EDID,        L"EDID"},
   {0x06,   SMBios,      L"SMBios"},
