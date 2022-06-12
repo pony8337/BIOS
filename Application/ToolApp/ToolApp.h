@@ -115,6 +115,7 @@ extern EFI_HANDLE                   gImageHandle;
 #define TITLE_COLOR                 EFI_LIGHTGRAY
 
 #define EFI_KEY_TAB                 0x09
+#define EFI_KEY_ENTER               0x0D
 #define CLEAN_DATA                  Print(L"                                                                                ")
 #define DELAY_TIME                  10000000
 #define SetColor(color)             gST->ConOut->SetAttribute(gST->ConOut, color)
@@ -163,7 +164,7 @@ extern EFI_HANDLE                   gImageHandle;
 
 
 // Block D
-#define BLOCKD_TITLE_COLOR          EFI_LIGHTRED
+#define BLOCKD_TITLE_COLOR          EFI_WHITE
 #define BlockD_Info_X               52
 #define BlockD_Info_Y               3
 #define BlockD_ShowASCII_X(offset)  offset % 16 + 54      

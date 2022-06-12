@@ -20,13 +20,10 @@ VOID VariableDetail (
   gST->ConOut->ClearScreen(gST->ConOut);
   offset = 0;
   // Block A
-  SetColor(SHOW_DATA_COLOR);
+  SetColor(TITLE_COLOR);
   gotoXY(BlockA_Function_Name_X, BlockA_Function_Name_Y);
-  Print(L"[ ");
-  SetColor(BLOCKD_TITLE_COLOR); 
-  Print(L"%s", VariableInfo.VariableName);
-  SetColor(SHOW_DATA_COLOR);
-  Print(L" ]");
+  Print(L"[ %s ]", VariableInfo.VariableName);
+  SetColor(TITLE_COLOR);
   gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
   Print(L"GUID: ");
   Print(L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x", 
@@ -43,8 +40,8 @@ VOID VariableDetail (
                               VariableInfo.VendorGuid.Data4[7]); 
   gotoXY(BlockA_Boundary_X, BlockA_Boundary_Y);
   BLOCK_BOUNDARY;
-  // Block B
-  SetColor(EFI_LIGHTGRAY);
+  // Block B  
+  SetColor(TITLE_COLOR);
   gotoXY(BlockB_Page_Num_X , BlockB_Page_Num_Y);
   CurrPage = 1;
   PageNum = (VariableInfo.VariableSize % 256) == 0 ? VariableInfo.VariableSize / 256 : VariableInfo.VariableSize / 256 + 1;
@@ -56,14 +53,7 @@ VOID VariableDetail (
   UpdateArrayData(VarData, VariableInfo.VariableSize, CurrPage, VariableData);
 
   // Block C
-  SetColor(EFI_BROWN);
-  for(Index = 0; Index <= 0xF; Index++){
-    gotoXY(BlockC_RowX(Index), BlockC_RowY(Index));
-    Print(L"%02x", Index);
-    gotoXY(BlockC_ColumnX(Index), BlockC_ColumnY(Index));
-    Print(L"%01x0", Index);
-  }
-  
+  ShowBlocCIndex();  
   for(Index = 0; Index <= 0xFF; Index++) {
     Index == offset ? SetColor(SHOW_CHOOSE_DATA) : (VariableData[Index] == 0xFF ? SetColor(NO_DATA_COLOR) : SetColor(SHOW_DATA_COLOR));
     gotoXY(BlockC_OffsetX(Index), BlockC_OffsetY(Index));

@@ -44,34 +44,33 @@ VOID updateMmioData (
 }
 
 
-// UINT8
-// ChangeInputData (
-//   IN  UINT8  Data,
-//   IN  CHAR16 InputData,
-//   IN  UINTN  offset
-//   )
-// {
-// 	if (InputData >= '0' && InputData <= '9') {
-// 		Data = (Data << 4) | (UINT8)(InputData - '0');
-// 		SetColor(INPUT_DATA_COLOR);
-// 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
-// 		Print(L"%02x ", Data);
-// 		return Data;
-// 	} else if (InputData >= 'a' && InputData <= 'f') {
-// 		Data = (Data << 4) | (UINT8)(InputData - 'a' + 10);
-// 		SetColor(INPUT_DATA_COLOR);
-// 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
-// 		Print(L"%02x ", Data);
-// 		return Data;
-// 	} else if (InputData >= 'A' && InputData <= 'F') {
-// 		Data = (Data << 4) | (UINT8)(InputData - 'A' + 10);
-// 		SetColor(INPUT_DATA_COLOR);
-// 		gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
-// 		Print(L"%02x ", Data);
-// 		return Data;
-// 	}
-// 	return Data;
-// }
+UINTN
+ChangeInputAddress (
+  IN  UINTN  Address,
+  IN  CHAR16 InputValue
+  )
+{
+	if (InputValue >= '0' && InputValue <= '9') {
+		Address = (Address << 4) | (InputValue - '0');		
+        SetColor(INPUT_DATA_COLOR);
+        gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+        Print(L"Address: 0x%08x", Address);
+		return Address;
+	} else if (InputValue >= 'a' && InputValue <= 'f') {
+		Address = (Address << 4) | (InputValue - 'a' + 10);
+		SetColor(INPUT_DATA_COLOR);
+        gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+        Print(L"Address: 0x%08x", Address);
+		return Address;
+	} else if (InputValue >= 'A' && InputValue <= 'F') {
+		Address = (Address << 4) | (InputValue - 'A' + 10);
+		SetColor(INPUT_DATA_COLOR);
+        gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+        Print(L"Address: 0x%08x", Address);
+		return Address;
+	}
+	return Address;
+}
 
 
 
@@ -121,7 +120,6 @@ VOID MMIO()
         // Block D information
         ShowASCII(Index, MMIOData[Index]);
     }
-    // updateMmioData (Address, MMIOData, offset);
 
     do {
         // Set a timer event of 1 second expiration  
@@ -171,20 +169,38 @@ VOID MMIO()
             
             break;
         case SCAN_NULL:
-            // key.ScanCode=SCAN_ESC;
-            if(key.UnicodeChar == CHAR_BACKSPACE && InputMode) {
-                InputData >>= 4;
-                SetColor(INPUT_DATA_COLOR);
-                gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
-                Print(L"%02x ", InputData);
-            } else if (key.UnicodeChar == 0x0D && InputMode) {        
-                MemioWrite8(Address + offset, InputData);
-                InputMode = FALSE;
+            if(key.UnicodeChar == CHAR_BACKSPACE) {
+                if(ModifyAddrMode) {
+                    InputAddr >>= 4;
+                    SetColor(INPUT_DATA_COLOR);
+                    gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+                    Print(L"Address: 0x%08x", InputAddr);    
+                } else if(InputMode) {
+                    InputData >>= 4;
+                    SetColor(INPUT_DATA_COLOR);
+                    gotoXY(BlockC_OffsetX(offset), BlockC_OffsetY(offset));
+                    Print(L"%02x ", InputData);
+                }
+            } else if (key.UnicodeChar == EFI_KEY_ENTER) {
+                if(ModifyAddrMode) {
+                    Address = InputAddr;
+                    ModifyAddrMode = FALSE;
+                    Address = (Address > 0xFFFFFF00) ? 0xFFFFFF00 : Address;  
+                    SetColor(TITLE_COLOR);
+                    gotoXY(BlockA_Function_Detail_X, BlockA_Function_Detail_Y);
+                    Print(L"Address: 0x%08x", Address);
+                    updateMmioData (Address, MMIOData, offset, ModifyAddrMode);                    
+                } else if(InputMode) {     
+                    MemioWrite8(Address + offset, InputData);
+                    InputMode = FALSE;
+                }
             } else if(IsDigital(key.UnicodeChar)) {
                 if(!ModifyAddrMode) {
                     InputData = InputMode ? InputData : 0;
                     InputMode = TRUE;
                     InputData = ChangeInputData(InputData, key.UnicodeChar, offset);
+                } else {
+                    InputAddr = ChangeInputAddress(InputAddr, key.UnicodeChar);
                 }
             } 
             break;
