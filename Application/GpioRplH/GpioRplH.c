@@ -90,8 +90,7 @@ VOID GPIO_Info (UINTN config)
   for(GpioNum = 0; GpioNum < GPIO_NUM; GpioNum++) {
     GpioData = 0;
     GpioAddr = GPIO_ADDR(Community, GPIO_BASE, GpioNum);
-    Print(L"%s%02d: ", GPIO_Group, GpioNum);
-    // Print(L" %d, ", (UINT8)*(GpioData + GpioAddr + OFFSET_1));
+    Print(L"%s%02d: ", GPIO_Group, GpioNum);   
     PAD_MODE = ((UINT8)*(GpioData + GpioAddr + OFFSET_1) & GPIO_FUNCTION) >> 2;
     if(!PAD_MODE) {
       Print(L"GPIO Mode, ");
@@ -103,7 +102,7 @@ VOID GPIO_Info (UINTN config)
     GPI = (BOOLEAN)((*(GpioData + GpioAddr + OFFSET_1) & RX_DISABLE) >> 1);
     GPI ? Print(L"GPI Disabled, ") : Print(L"GPI Enabled, ");
     (BOOLEAN)((*(GpioData + GpioAddr + OFFSET_0) & RX_STATE_BIT) >> 1) ? Print(L"Input High, ") : Print(L"Input Low, ");
-    !GPI && (BOOLEAN)((*(GpioData + GpioAddr + OFFSET_1) & RX_INVERSE) >> 7) ? Print(L"Inversion, ") : Print(L"No Inversion, ");  
+    !GPI && (BOOLEAN)((*(GpioData + GpioAddr + OFFSET_2) & RX_INVERSE) >> 7) ? Print(L"Inversion, ") : Print(L"No Inversion, ");  
     // GPO
     GPO = (BOOLEAN)(*(GpioData + GpioAddr + OFFSET_1) & TX_DISABLE);
     GPO ? Print(L"GPO Disabled, ") : Print(L"GPO Enabled, ");
@@ -126,8 +125,7 @@ VOID GPIO_Info (UINTN config)
       default:
         Print(L"Reset: %d.\n", Reset);
         break;
-    }
-
+    }   
   }
 }
 
