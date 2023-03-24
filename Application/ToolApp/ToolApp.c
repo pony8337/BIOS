@@ -1,6 +1,4 @@
 #include "ToolApp.h"
-
-VOID IOSpace(){return;}
 VOID PCI(){return;}
 // VOID Memory(){return;}
 VOID SMBus(){return;}
